@@ -75,10 +75,9 @@ export default function HomeClient({ templates }: Props) {
         <div className="space-y-6">
           {/* Names */}
           <div className="bg-white/80 backdrop-blur rounded-3xl p-6 shadow-lg">
-            <h3 className="font-display text-xl font-bold text-[#2d1f1a] mb-1">
-              Udělej to osobní 🎯
+            <h3 className="font-display text-xl font-bold text-[#2d1f1a] mb-4">
+              🧪 Namíchej to správně:
             </h3>
-            <p className="text-sm text-[#a08070] mb-4">Čím víc detailů, tím větší reakce</p>
             
             <div className="space-y-4">
               <div>

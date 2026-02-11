@@ -8,16 +8,15 @@ export default function Home() {
     <main className="py-8 sm:py-12">
       {/* Hero */}
       <header className="text-center mb-8">
-        <p className="uppercase tracking-[0.2em] text-sm text-[#a24b4b] mb-2 font-semibold">
-          💘 Digi-Valentýnka
+        <p className="tracking-[0.15em] text-sm text-[#a24b4b] mb-2 font-semibold">
+          ✨ Digi-Valentýnka 💘
         </p>
         <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#2d1f1a] mb-4 leading-tight">
-          Řekni to, co si fakt myslíš.
-          <span className="block text-[#a24b4b]">(A co by se na plyšáka nevešlo.)</span>
+          Dokaž, že máš vkus — údernou valentýnkou
         </h1>
-        <p className="text-lg text-[#5c4038] max-w-2xl mx-auto">
-          Zapomeň na přeslazená klišé. Vyber hlášku, která sedí, personalizuj a pošli.
-          <span className="font-semibold text-[#2d1f1a]"> Za 30 vteřin máš hotovo.</span>
+        <p className="text-lg text-[#5c4038] max-w-2xl mx-auto leading-relaxed">
+          Zapomeň na univerzální básničky z internetu. Vytvoř valentýnku, která má vtip, jiskru a tvoji DNA. 
+          <span className="block mt-2 font-medium text-[#2d1f1a]">Ať už jde o tajnou lásku, čerstvý vztah nebo manželství, kde už si nic nedarujete — s tímhle zaskóruješ!</span>
         </p>
       </header>
 
