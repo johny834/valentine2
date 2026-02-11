@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import GeneratorForm, { type FormData } from "@/components/GeneratorForm";
-import type { Template } from "@/types/content";
+import type { Template, TextEntry } from "@/types/content";
+import { selectText, reshuffleText } from "@/lib/textSelector";
 
 interface Props {
   templates: Template[];
@@ -11,24 +12,43 @@ interface Props {
 
 export default function CreatePageClient({ templates }: Props) {
   const router = useRouter();
-  const [generatedText, setGeneratedText] = useState<string | null>(null);
+  const [selectedText, setSelectedText] = useState<TextEntry | null>(null);
   const [formData, setFormData] = useState<FormData | null>(null);
 
   const handleGenerate = (data: FormData) => {
     setFormData(data);
-    // Placeholder - will be replaced by T1.5 text selector
-    setGeneratedText("💕 Vygenerovaný text se zobrazí zde (T1.5)");
+    
+    const text = selectText({
+      tone: data.tone,
+      keywords: data.keywords,
+    });
+    
+    setSelectedText(text);
+  };
+
+  const handleReshuffle = () => {
+    if (!formData) return;
+    
+    const text = reshuffleText(
+      {
+        tone: formData.tone,
+        keywords: formData.keywords,
+      },
+      selectedText?.id
+    );
+    
+    setSelectedText(text);
   };
 
   const handleContinue = () => {
-    if (!formData || !generatedText) return;
+    if (!formData || !selectedText) return;
     
     // Serialize to URL params for preview
     const params = new URLSearchParams({
       t: formData.templateId,
       to: formData.toName,
       from: formData.fromName,
-      text: generatedText,
+      text: selectedText.text,
     });
     
     router.push(`/preview?${params.toString()}`);
@@ -38,17 +58,17 @@ export default function CreatePageClient({ templates }: Props) {
     <>
       <GeneratorForm templates={templates} onGenerate={handleGenerate} />
 
-      {generatedText && (
+      {selectedText && (
         <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">
             Vygenerovaný text:
           </h2>
-          <p className="text-lg text-gray-800 bg-rose-50 p-4 rounded-lg mb-4">
-            {generatedText}
+          <p className="text-lg text-gray-800 bg-rose-50 p-4 rounded-lg mb-4 font-medium">
+            {selectedText.text}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
-              onClick={() => handleGenerate(formData!)}
+              onClick={handleReshuffle}
               className="flex-1 py-2 px-4 border-2 border-rose-300 text-rose-500 rounded-full font-medium hover:bg-rose-50 transition-colors"
             >
               🔄 Zkusit jiný text
