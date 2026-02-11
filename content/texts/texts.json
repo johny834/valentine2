@@ -17,12 +17,12 @@
   { "id": "spicy-04", "tone": "spicy", "tags": ["hot", "magnetic"], "text": "Přitahuješ mě víc než gravitace 🧲" },
   { "id": "spicy-05", "tone": "spicy", "tags": ["hot", "chemistry"], "text": "Mezi námi je chemie, kterou by záviděl i Mendělejev 🧪" },
 
-  { "id": "office-01", "tone": "office", "tags": ["dwight", "beets"], "text": "Kdybys byla řepa, byla bys ta nejlepší řepa na Schrute Farms 🥬" },
-  { "id": "office-02", "tone": "office", "tags": ["michael", "boss"], "text": "That's what she said... když mluvila o tom, jak moc tě miluje 😏" },
-  { "id": "office-03", "tone": "office", "tags": ["jim", "pam"], "text": "Jsi Pam k mému Jimovi. Bez zbytečného čekání 4 sezóny 💕" },
-  { "id": "office-04", "tone": "office", "tags": ["michael", "love"], "text": "Miluji tě víc, než Michael miluje být středem pozornosti 🎤" },
-  { "id": "office-05", "tone": "office", "tags": ["dwight", "assistant"], "text": "Jsi assistant TO the regional manager mého srdce 📋❤️" },
-  { "id": "office-06", "tone": "office", "tags": ["kevin", "chili"], "text": "Moje láska k tobě je jako Kevinovo chili - velká, chaotická, ale upřímná 🍲" },
-  { "id": "office-07", "tone": "office", "tags": ["stanley", "pretzel"], "text": "Těším se na tebe víc než Stanley na Pretzel Day 🥨" },
-  { "id": "office-08", "tone": "office", "tags": ["michael", "friend"], "text": "Jsi můj nejlepší přítel. A víc než přítel. A ještě víc. 💘" }
+  { "id": "office-01", "tone": "office", "tags": ["dwight", "beets"], "text": "Kdybys byla řepa, byla bys ta nejlepší řepa na Schrute Farms 🥬", "image": "/illustrations/office/dwight.jpg" },
+  { "id": "office-02", "tone": "office", "tags": ["michael", "boss"], "text": "That's what she said... když mluvila o tom, jak moc tě miluje 😏", "image": "/illustrations/office/michael.jpg" },
+  { "id": "office-03", "tone": "office", "tags": ["jim", "pam"], "text": "Jsi Pam k mému Jimovi. Bez zbytečného čekání 4 sezóny 💕", "image": "/illustrations/office/jim_pam.jpg" },
+  { "id": "office-04", "tone": "office", "tags": ["michael", "love"], "text": "Miluji tě víc, než Michael miluje být středem pozornosti 🎤", "image": "/illustrations/office/michael2.jpg" },
+  { "id": "office-05", "tone": "office", "tags": ["dwight", "assistant"], "text": "Jsi assistant TO the regional manager mého srdce 📋❤️", "image": "/illustrations/office/dwight.jpg" },
+  { "id": "office-06", "tone": "office", "tags": ["kevin", "chili"], "text": "Moje láska k tobě je jako Kevinovo chili - velká, chaotická, ale upřímná 🍲", "image": "/illustrations/office/michael.jpg" },
+  { "id": "office-07", "tone": "office", "tags": ["stanley", "pretzel"], "text": "Těším se na tebe víc než Stanley na Pretzel Day 🥨", "image": "/illustrations/office/michael2.jpg" },
+  { "id": "office-08", "tone": "office", "tags": ["michael", "friend"], "text": "Jsi můj nejlepší přítel. A víc než přítel. A ještě víc. 💘", "image": "/illustrations/office/michael.jpg" }
 ]

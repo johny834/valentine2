@@ -5,6 +5,7 @@ export interface TextEntry {
   tone: Tone;
   tags: string[];
   text: string;
+  image?: string; // Optional custom image for the card
 }
 
 export interface Template {

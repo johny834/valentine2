@@ -32,6 +32,7 @@ export default function HomeClient({ templates }: Props) {
   const displayTo = toName.trim() || "Tebe";
   const displayText = customMessage.trim() || selectedText?.text || "Vyber text z galerie nebo napiš vlastní ✨";
   const currentTone = selectedText?.tone || "funny";
+  const displayImage = selectedText?.image || defaultTemplate.illustrationPath;
 
   const handleTextSelect = (text: TextEntry) => {
     setSelectedText(text);
@@ -137,13 +138,13 @@ export default function HomeClient({ templates }: Props) {
         <div className="lg:sticky lg:top-8">
           <div className="valentine-card">
             {/* Card art */}
-            <div className="h-48 sm:h-56 bg-gradient-to-br from-[#ffdde1] to-[#ee9ca7] flex items-center justify-center">
-              <div className="relative w-32 h-32 sm:w-40 sm:h-40">
+            <div className="h-48 sm:h-56 bg-gradient-to-br from-[#ffdde1] to-[#ee9ca7] flex items-center justify-center overflow-hidden">
+              <div className={`relative ${selectedText?.image ? 'w-full h-full' : 'w-32 h-32 sm:w-40 sm:h-40'}`}>
                 <Image
-                  src={defaultTemplate.illustrationPath}
-                  alt={defaultTemplate.name}
+                  src={displayImage}
+                  alt="Valentine card"
                   fill
-                  className="object-contain drop-shadow-lg"
+                  className={selectedText?.image ? "object-cover" : "object-contain drop-shadow-lg"}
                 />
               </div>
             </div>
