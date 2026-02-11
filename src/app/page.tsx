@@ -9,7 +9,7 @@ export default function Home() {
       {/* Hero */}
       <header className="text-center mb-8">
         <p className="uppercase tracking-[0.2em] text-sm text-[#a24b4b] mb-2 font-semibold">
-          💘 Valentýn pro cyniky (a lidi s vkusem)
+          💘 Digi-Valentýnka
         </p>
         <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#2d1f1a] mb-4 leading-tight">
           Řekni to, co si fakt myslíš.
