@@ -75,9 +75,10 @@ export default function HomeClient({ templates }: Props) {
         <div className="space-y-6">
           {/* Names */}
           <div className="bg-white/80 backdrop-blur rounded-3xl p-6 shadow-lg">
-            <h3 className="font-display text-xl font-bold text-[#2d1f1a] mb-4">
-              Personalizace
+            <h3 className="font-display text-xl font-bold text-[#2d1f1a] mb-1">
+              Udělej to osobní 🎯
             </h3>
+            <p className="text-sm text-[#a08070] mb-4">Čím víc detailů, tím větší reakce</p>
             
             <div className="space-y-4">
               <div>
@@ -172,13 +173,16 @@ export default function HomeClient({ templates }: Props) {
           </div>
 
           {/* Share button */}
-          <div className="mt-4">
+          <div className="mt-4 space-y-2">
             <button
               onClick={handleShare}
-              className="btn-primary w-full"
+              className="btn-primary w-full text-lg"
             >
-              📤 Sdílet valentýnku
+              🚀 Poslat překvápko
             </button>
+            <p className="text-center text-xs text-[#a08070]">
+              ...a sleduj tu reakci 👀
+            </p>
           </div>
         </div>
       </div>
@@ -186,10 +190,10 @@ export default function HomeClient({ templates }: Props) {
       {/* Text Gallery */}
       <div className="bg-white/80 backdrop-blur rounded-3xl p-6 shadow-lg">
         <h3 className="font-display text-2xl font-bold text-[#2d1f1a] mb-2">
-          Galerie textů
+          Vyber hlášku, co zvedne tep 💓
         </h3>
         <p className="text-[#5c4038] mb-6">
-          Klikni na kartu a text se přenese do náhledu
+          Klikni → text jde do náhledu → hotovo. Tak jednoduché.
         </p>
 
         {/* Category tabs */}

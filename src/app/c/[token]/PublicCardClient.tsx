@@ -60,7 +60,7 @@ export default function PublicCardClient({
           onClick={handleShare}
           className="bg-white hover:bg-gray-50 text-rose-500 font-semibold py-3 px-8 rounded-full transition-colors shadow-lg border border-rose-200"
         >
-          Sdílet kartičku 🔗
+          Ukázat i ostatním 📤
         </button>
       </div>
     </>

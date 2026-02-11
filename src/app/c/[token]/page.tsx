@@ -65,7 +65,7 @@ export default async function PublicCardPage({ params }: PageProps) {
     <main className="min-h-screen py-8 sm:py-12 px-4">
       <div className="max-w-lg mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">
-          Máš valentýnku! 💌
+          Někdo ti poslal překvápko 👀💕
         </h1>
 
         <PublicCardClient
@@ -85,12 +85,12 @@ export default async function PublicCardPage({ params }: PageProps) {
 
         {/* Create your own CTA */}
         <div className="mt-12 text-center">
-          <p className="text-gray-600 mb-4">Chceš poslat vlastní valentýnku?</p>
+          <p className="text-gray-600 mb-4">Chceš někoho taky trochu rozhodit? 😏</p>
           <a
             href="/"
             className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-lg"
           >
-            Vytvořit kartičku 💕
+            Vytvořit vlastní za 30 vteřin 🚀
           </a>
         </div>
       </div>
