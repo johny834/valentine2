@@ -25,19 +25,22 @@ export default function HomeClient({ templates }: Props) {
   const [fromName, setFromName] = useState("");
   const [toName, setToName] = useState("");
   const [customMessage, setCustomMessage] = useState("");
-  const [selectedText, setSelectedText] = useState<TextEntry | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedTone, setSelectedTone] = useState<Tone>("funny");
   const [activeCategory, setActiveCategory] = useState<Tone>("funny");
 
   // Live preview values
   const displayFrom = fromName.trim() || "Tajný ctitel";
   const displayTo = toName.trim() || "Tebe";
-  const displayText = customMessage.trim() || selectedText?.text || "Vyber text z galerie nebo napiš vlastní ✨";
-  const currentTone = selectedText?.tone || "funny";
-  const displayImage = selectedText?.image || defaultTemplate.illustrationPath;
+  const displayText = customMessage.trim() || "Vyber šablonu z galerie nebo napiš vlastní ✨";
+  const displayImage = selectedImage || defaultTemplate.illustrationPath;
 
   const handleTextSelect = (text: TextEntry) => {
-    setSelectedText(text);
-    setCustomMessage(""); // Clear custom when selecting from gallery
+    // Set the custom message field with the template text
+    setCustomMessage(text.text);
+    // Store the image separately so it persists when user edits text
+    setSelectedImage(text.image || null);
+    setSelectedTone(text.tone);
   };
 
   const handleShare = async () => {
@@ -114,10 +117,7 @@ export default function HomeClient({ templates }: Props) {
                 </label>
                 <textarea
                   value={customMessage}
-                  onChange={(e) => {
-                    setCustomMessage(e.target.value);
-                    if (e.target.value) setSelectedText(null);
-                  }}
+                  onChange={(e) => setCustomMessage(e.target.value)}
                   placeholder="Napiš vlastní text..."
                   maxLength={MAX_LENGTHS.message}
                   rows={3}
@@ -140,12 +140,12 @@ export default function HomeClient({ templates }: Props) {
           <div className="valentine-card">
             {/* Card art */}
             <div className="h-80 sm:h-96 bg-gradient-to-br from-[#ffdde1] to-[#ee9ca7] flex items-center justify-center overflow-hidden">
-              <div className={`relative ${selectedText?.image ? 'w-full h-full' : 'w-32 h-32 sm:w-40 sm:h-40'}`}>
+              <div className={`relative ${selectedImage ? 'w-full h-full' : 'w-32 h-32 sm:w-40 sm:h-40'}`}>
                 <Image
                   src={displayImage}
                   alt="Valentine card"
                   fill
-                  className={selectedText?.image ? "object-cover" : "object-contain drop-shadow-lg"}
+                  className={selectedImage ? "object-cover" : "object-contain drop-shadow-lg"}
                 />
               </div>
             </div>
@@ -166,7 +166,7 @@ export default function HomeClient({ templates }: Props) {
 
               {/* Badge */}
               <div className="mt-4 inline-block bg-[#2d1f1a] text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider">
-                {CATEGORIES.find(c => c.tone === currentTone)?.label} {CATEGORIES.find(c => c.tone === currentTone)?.emoji}
+                {CATEGORIES.find(c => c.tone === selectedTone)?.label} {CATEGORIES.find(c => c.tone === selectedTone)?.emoji}
               </div>
             </div>
           </div>
@@ -212,21 +212,38 @@ export default function HomeClient({ templates }: Props) {
           ))}
         </div>
 
-        {/* Text cards grid */}
+        {/* Template cards grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {categoryTexts.map((text) => (
             <button
               key={text.id}
               onClick={() => handleTextSelect(text)}
-              className={`text-left p-4 rounded-2xl transition-all hover:scale-[1.02] ${
-                selectedText?.id === text.id
-                  ? "bg-[#fff0ed] ring-2 ring-[#f04f5f] shadow-lg"
-                  : "bg-white/60 hover:bg-white/80 shadow-md hover:shadow-lg"
+              className={`text-left rounded-2xl transition-all hover:scale-[1.02] overflow-hidden ${
+                customMessage === text.text && selectedImage === (text.image || null)
+                  ? "ring-2 ring-[#f04f5f] shadow-lg"
+                  : "shadow-md hover:shadow-lg"
               }`}
             >
-              <p className="text-[#2d1f1a] font-medium leading-snug">
-                {text.text}
-              </p>
+              {/* Image preview */}
+              {text.image && (
+                <div className="relative h-32 bg-gradient-to-br from-[#ffdde1] to-[#ee9ca7]">
+                  <Image
+                    src={text.image}
+                    alt=""
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <div className={`p-4 ${
+                customMessage === text.text && selectedImage === (text.image || null)
+                  ? "bg-[#fff0ed]"
+                  : "bg-white/60"
+              }`}>
+                <p className="text-[#2d1f1a] font-medium leading-snug">
+                  {text.text}
+                </p>
+              </div>
             </button>
           ))}
         </div>
