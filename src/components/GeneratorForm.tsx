@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import type { Template, Tone } from "@/types/content";
 import { MAX_LENGTHS, containsBlockedContent, escapeHtml } from "@/lib/validation";
+import TemplateGallery from "./TemplateGallery";
 
 interface GeneratorFormProps {
   templates: Template[];
@@ -79,6 +79,10 @@ export default function GeneratorForm({ templates, onGenerate }: GeneratorFormPr
     });
   };
 
+  const handleTemplateSelect = (template: Template) => {
+    setSelectedTemplate(template.id);
+  };
+
   return (
     <div className="space-y-8">
       {/* Template selection */}
@@ -86,32 +90,13 @@ export default function GeneratorForm({ templates, onGenerate }: GeneratorFormPr
         <h2 className="text-xl font-semibold text-gray-700 mb-4">
           1. Vyber šablonu
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {templates.map((template) => (
-            <button
-              key={template.id}
-              type="button"
-              onClick={() => setSelectedTemplate(template.id)}
-              className={`bg-white rounded-2xl shadow-md p-4 transition-all text-left ${
-                selectedTemplate === template.id
-                  ? "ring-2 ring-rose-500 shadow-lg"
-                  : "hover:ring-2 hover:ring-rose-300"
-              }`}
-            >
-              <div className="aspect-square relative mb-3 bg-gradient-to-br from-pink-50 to-rose-100 rounded-xl overflow-hidden">
-                <Image
-                  src={template.illustrationPath}
-                  alt={template.name}
-                  fill
-                  className="object-contain p-4"
-                />
-              </div>
-              <p className="text-center font-medium text-gray-700">
-                {template.name}
-              </p>
-            </button>
-          ))}
-        </div>
+        <TemplateGallery
+          templates={templates}
+          selectedId={selectedTemplate}
+          onSelect={handleTemplateSelect}
+          interactive={true}
+          showLabels={true}
+        />
         {errors.template && (
           <p className="text-red-500 text-sm mt-2">{errors.template}</p>
         )}

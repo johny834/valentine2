@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { loadTemplates } from "@/lib/content";
+import TemplateGallery from "@/components/TemplateGallery";
 
 export default function Home() {
   const templates = loadTemplates();
@@ -59,26 +59,18 @@ export default function Home() {
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-8">
           Ukázky šablon
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {templates.slice(0, 3).map((template) => (
-            <Link
-              key={template.id}
-              href="/create"
-              className="bg-white rounded-2xl aspect-[3/4] shadow-md flex flex-col items-center justify-center p-6 hover:shadow-lg transition-shadow group"
-            >
-              <div className="relative w-full h-3/4 mb-4">
-                <Image
-                  src={template.illustrationPath}
-                  alt={template.name}
-                  fill
-                  className="object-contain group-hover:scale-105 transition-transform"
-                />
-              </div>
-              <p className="font-medium text-gray-700 group-hover:text-rose-500 transition-colors">
-                {template.name}
-              </p>
-            </Link>
-          ))}
+        <TemplateGallery
+          templates={templates.slice(0, 3)}
+          interactive={false}
+          showLabels={true}
+        />
+        <div className="text-center mt-6">
+          <Link
+            href="/create"
+            className="text-rose-500 hover:text-rose-600 font-medium transition-colors"
+          >
+            Zobrazit všechny šablony →
+          </Link>
         </div>
       </section>
 
