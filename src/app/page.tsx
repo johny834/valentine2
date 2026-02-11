@@ -1,90 +1,31 @@
-import Link from "next/link";
 import { loadTemplates } from "@/lib/content";
-import TemplateGallery from "@/components/TemplateGallery";
+import HomeClient from "./HomeClient";
 
 export default function Home() {
   const templates = loadTemplates();
 
   return (
-    <main className="py-12 sm:py-20">
+    <main className="py-8 sm:py-12">
       {/* Hero */}
-      <section className="text-center mb-16">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-rose-600 mb-4 font-handwriting">
-          Valentine2 💕
-        </h1>
-        <p className="text-lg sm:text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
-          Vytvoř jedinečnou valentýnku s krásnými ilustracemi a vtipnými texty.
-          Žádné AI, jen láska a kreativita.
+      <header className="text-center mb-8">
+        <p className="uppercase tracking-[0.2em] text-sm text-[#a24b4b] mb-2">
+          Valentine Forge
         </p>
-        <Link
-          href="/create"
-          className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-8 rounded-full text-lg transition-colors shadow-lg hover:shadow-xl"
-        >
-          Vytvořit kartu ❤️
-        </Link>
-      </section>
+        <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#2d1f1a] mb-4">
+          Vtipná valentýnka, která se nesnaží být roztomilá — a právě proto funguje.
+        </h1>
+        <p className="text-lg text-[#5c4038] max-w-2xl mx-auto">
+          Vytvoř si satirickou, lehce žhavou (ale stále safe) valentýnku. 
+          Vlastní ilustrace, sdílení jedním kliknutím.
+        </p>
+      </header>
 
-      {/* Jak to funguje */}
-      <section className="mb-16">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-8">
-          Jak to funguje?
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div className="bg-white/80 backdrop-blur rounded-2xl p-6 text-center shadow-md">
-            <div className="text-4xl mb-4">🎨</div>
-            <h3 className="font-semibold text-lg mb-2">1. Vyber šablonu</h3>
-            <p className="text-gray-600 text-sm">
-              Zvol si z krásných ručně kreslených ilustrací
-            </p>
-          </div>
-          <div className="bg-white/80 backdrop-blur rounded-2xl p-6 text-center shadow-md">
-            <div className="text-4xl mb-4">✍️</div>
-            <h3 className="font-semibold text-lg mb-2">2. Přidej text</h3>
-            <p className="text-gray-600 text-sm">
-              Vyber tón a nech si vygenerovat vtipný text
-            </p>
-          </div>
-          <div className="bg-white/80 backdrop-blur rounded-2xl p-6 text-center shadow-md">
-            <div className="text-4xl mb-4">💌</div>
-            <h3 className="font-semibold text-lg mb-2">3. Pošli lásku</h3>
-            <p className="text-gray-600 text-sm">
-              Sdílej kartu nebo ji stáhni jako obrázek
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Preview galerie */}
-      <section className="mb-16">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-8">
-          Ukázky šablon
-        </h2>
-        <TemplateGallery
-          templates={templates.slice(0, 3)}
-          interactive={false}
-          showLabels={true}
-        />
-        <div className="text-center mt-6">
-          <Link
-            href="/create"
-            className="text-rose-500 hover:text-rose-600 font-medium transition-colors"
-          >
-            Zobrazit všechny šablony →
-          </Link>
-        </div>
-      </section>
+      {/* Main builder */}
+      <HomeClient templates={templates} />
 
       {/* Footer */}
-      <footer className="text-center text-gray-500 text-sm border-t border-rose-200 pt-8">
-        <div className="space-x-4">
-          <Link href="#" className="hover:text-rose-500 transition-colors">
-            Ochrana soukromí
-          </Link>
-          <Link href="#" className="hover:text-rose-500 transition-colors">
-            Podmínky použití
-          </Link>
-        </div>
-        <p className="mt-4">Made with ❤️ in Prague</p>
+      <footer className="text-center text-[#5c4038] text-sm mt-16 pt-8 border-t border-[#e0c2b3]">
+        <p>Valentine Forge — vytvoř si vtipnou valentýnku a nebuď suchar. 💕</p>
       </footer>
     </main>
   );

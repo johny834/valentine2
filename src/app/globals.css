@@ -1,18 +1,146 @@
 @import "tailwindcss";
 
 :root {
-  --font-sans: var(--font-nunito), system-ui, sans-serif;
-  --font-handwriting: var(--font-caveat), cursive;
+  --bg: #fff4ec;
+  --ink: #2d1f1a;
+  --accent: #f04f5f;
+  --accent-2: #ffb36b;
+  --card: #fffaf6;
+  --shadow: 0 20px 60px rgba(37, 19, 12, 0.15);
+  --radius: 24px;
   
-  --color-primary: #e11d48;
-  --color-primary-light: #fb7185;
-  --color-primary-dark: #be123c;
-  --color-accent: #f43f5e;
-  --color-background: #fff1f2;
+  --font-sans: var(--font-nunito), system-ui, sans-serif;
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-handwriting: var(--font-caveat), cursive;
 }
 
 body {
   font-family: var(--font-sans);
+  background: radial-gradient(circle at top, #ffe0d3 0%, #fff4ec 40%, #f9f0ff 100%);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* Ambient floating circles */
+.ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.ambient span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+  animation: float 18s ease-in-out infinite;
+}
+
+.ambient span:nth-child(1) {
+  width: 400px;
+  height: 400px;
+  background: #ff9aa2;
+  top: -100px;
+  left: -80px;
+}
+
+.ambient span:nth-child(2) {
+  width: 350px;
+  height: 350px;
+  background: #ffd27d;
+  bottom: -100px;
+  right: -60px;
+  animation-delay: -6s;
+}
+
+.ambient span:nth-child(3) {
+  width: 300px;
+  height: 300px;
+  background: #a8e6cf;
+  top: 40%;
+  right: -100px;
+  animation-delay: -12s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+/* Card styling */
+.valentine-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transform: rotate(-1.5deg);
+  animation: cardPop 0.6s ease;
+}
+
+@keyframes cardPop {
+  0% { transform: scale(0.95) rotate(-1.5deg); opacity: 0; }
+  100% { transform: scale(1) rotate(-1.5deg); opacity: 1; }
+}
+
+.valentine-card:hover {
+  transform: rotate(-0.5deg) translateY(-4px);
+  transition: transform 0.3s ease;
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(120deg, var(--accent), #ff7b72);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(240, 79, 95, 0.3);
+}
+
+.btn-secondary {
+  background: #ffe3cf;
+  color: #4e2c24;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+}
+
+/* Form inputs */
+.input-field {
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 2px solid #e0c2b3;
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: white;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(240, 79, 95, 0.1);
+}
+
+/* Font utilities */
+.font-display {
+  font-family: var(--font-display);
 }
 
 .font-handwriting {
