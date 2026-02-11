@@ -1,0 +1,30 @@
+[
+  {
+    "id": "hearts-classic",
+    "name": "Klasická srdíčka",
+    "illustrationPath": "/illustrations/hearts-classic.svg",
+    "styleTokens": {
+      "primaryColor": "#e11d48",
+      "accentColor": "#fda4af"
+    }
+  },
+  {
+    "id": "cupid-arrow",
+    "name": "Amorův šíp",
+    "illustrationPath": "/illustrations/cupid-arrow.svg",
+    "styleTokens": {
+      "primaryColor": "#be185d",
+      "accentColor": "#f9a8d4"
+    }
+  },
+  {
+    "id": "love-letter",
+    "name": "Milostný dopis",
+    "illustrationPath": "/illustrations/love-letter.svg",
+    "styleTokens": {
+      "primaryColor": "#9f1239",
+      "accentColor": "#fecdd3",
+      "fontStyle": "handwriting"
+    }
+  }
+]

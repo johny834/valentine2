@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="heartGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f472b6"/>
+      <stop offset="100%" style="stop-color:#be185d"/>
+    </linearGradient>
+  </defs>
+  <path d="M100 160 C40 110 40 60 70 45 C85 38 100 55 100 55 C100 55 115 38 130 45 C160 60 160 110 100 160Z" fill="url(#heartGrad2)"/>
+  <line x1="30" y1="170" x2="170" y2="30" stroke="#9f1239" stroke-width="4"/>
+  <polygon points="170,30 155,25 165,40" fill="#9f1239"/>
+  <polygon points="30,170 35,155 20,165" fill="#fda4af"/>
+  <circle cx="55" cy="25" r="6" fill="#f9a8d4" opacity="0.7"/>
+  <circle cx="165" cy="65" r="4" fill="#f9a8d4" opacity="0.5"/>
+</svg>

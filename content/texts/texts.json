@@ -1,0 +1,25 @@
+[
+  { "id": "cute-01", "tone": "cute", "tags": ["sweet", "romantic"], "text": "Jsi jako WiFi - bez tebe nemám připojení k životu 📶💕" },
+  { "id": "cute-02", "tone": "cute", "tags": ["sweet", "nature"], "text": "Kdybys byla květina, byla bys celá zahrada 🌸" },
+  { "id": "cute-03", "tone": "cute", "tags": ["sweet", "food"], "text": "Jsi sladší než všechny dorty na světě 🍰" },
+  { "id": "cute-04", "tone": "cute", "tags": ["romantic", "stars"], "text": "I hvězdy závidí, jak moc záříš v mém životě ✨" },
+  { "id": "cute-05", "tone": "cute", "tags": ["sweet", "home"], "text": "Domov je tam, kde jsi ty 🏠💗" },
+  
+  { "id": "funny-01", "tone": "funny", "tags": ["humor", "tech"], "text": "Jsi jako Ctrl+Z - bez tebe bych udělal spoustu chyb 😄" },
+  { "id": "funny-02", "tone": "funny", "tags": ["humor", "food"], "text": "Miluji tě víc než pizzu. A to je co říct! 🍕" },
+  { "id": "funny-03", "tone": "funny", "tags": ["humor", "lazy"], "text": "Jsi jediný důvod, proč ráno vstávám. Jinak bych spal do oběda 😴" },
+  { "id": "funny-04", "tone": "funny", "tags": ["humor", "netflix"], "text": "Netflix se ptá, jestli tam ještě jsem. Odpověď: Ano, s tebou ❤️" },
+  { "id": "funny-05", "tone": "funny", "tags": ["humor", "math"], "text": "Láska k tobě je jako dělení nulou - nedefinovatelná a nebezpečná 🔥" },
+  
+  { "id": "spicy-01", "tone": "spicy", "tags": ["hot", "desire"], "text": "Jsi jako espresso - silná, horká a nedá se ti odolat ☕🔥" },
+  { "id": "spicy-02", "tone": "spicy", "tags": ["hot", "fire"], "text": "Zapal mi srdce, stejně pro tebe hoří 🔥" },
+  { "id": "spicy-03", "tone": "spicy", "tags": ["hot", "danger"], "text": "Varování: Obsah této karty může způsobit zrychlený tep ❤️‍🔥" },
+  { "id": "spicy-04", "tone": "spicy", "tags": ["hot", "magnetic"], "text": "Přitahuješ mě víc než gravitace 🧲" },
+  { "id": "spicy-05", "tone": "spicy", "tags": ["hot", "chemistry"], "text": "Mezi námi je chemie, kterou by záviděl i Mendělejev 🧪" },
+  
+  { "id": "sarcastic-01", "tone": "sarcastic", "tags": ["irony", "tech"], "text": "Rozhodl/a jsem se tě mít rád/a. Teď s tím žij 🤷" },
+  { "id": "sarcastic-02", "tone": "sarcastic", "tags": ["irony", "realistic"], "text": "Ze všech lidí na světě jsi nejméně otravný/á. To je láska! 💘" },
+  { "id": "sarcastic-03", "tone": "sarcastic", "tags": ["irony", "food"], "text": "Sdílím s tebou jídlo. Větší důkaz lásky neexistuje 🍟" },
+  { "id": "sarcastic-04", "tone": "sarcastic", "tags": ["irony", "honest"], "text": "Toleruji tvé vtípky. Prosím, oceň to 🙃" },
+  { "id": "sarcastic-05", "tone": "sarcastic", "tags": ["irony", "lazy"], "text": "Miluji tě natolik, že jsem ti koupil/a tuhle kartu místo abych ti něco vyrobil/a 🎁" }
+]
