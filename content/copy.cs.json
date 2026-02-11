@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "Valentine2 — Vytvoř valentýnku",
+    "description": "Vytvoř jedinečnou valentýnskou kartu s vlastními texty a ilustracemi"
+  },
+  "landing": {
+    "hero": {
+      "title": "Valentine2 💕",
+      "subtitle": "Vytvoř jedinečnou valentýnku s krásnými ilustracemi a vtipnými texty. Žádné AI, jen láska a kreativita.",
+      "cta": "Vytvořit kartu ❤️"
+    },
+    "howItWorks": {
+      "title": "Jak to funguje?",
+      "step1": {
+        "title": "1. Vyber šablonu",
+        "description": "Zvol si z krásných ručně kreslených ilustrací"
+      },
+      "step2": {
+        "title": "2. Přidej text",
+        "description": "Vyber tón a nech si vygenerovat vtipný text"
+      },
+      "step3": {
+        "title": "3. Pošli lásku",
+        "description": "Sdílej kartu nebo ji stáhni jako obrázek"
+      }
+    },
+    "gallery": {
+      "title": "Ukázky šablon",
+      "showAll": "Zobrazit všechny šablony →"
+    },
+    "footer": {
+      "privacy": "Ochrana soukromí",
+      "terms": "Podmínky použití",
+      "madeWith": "Made with ❤️ in Prague"
+    }
+  },
+  "create": {
+    "title": "Vytvoř svou valentýnku",
+    "backToHome": "← Zpět na úvod",
+    "sections": {
+      "template": "1. Vyber šablonu",
+      "names": "2. Komu a od koho?",
+      "tone": "3. Jaký tón?",
+      "keywords": "4. Něco navíc? (volitelné)"
+    },
+    "form": {
+      "toName": {
+        "label": "Komu (volitelné)",
+        "placeholder": "Např. Terezka"
+      },
+      "fromName": {
+        "label": "Od koho (volitelné)",
+        "placeholder": "Např. Tvůj tajný ctitel"
+      },
+      "anonymous": "Chci zůstat v anonymitě 🕵️",
+      "keywords": {
+        "placeholder": "Společný vtip, přezdívka, oblíbené jídlo...",
+        "hint": "Pomůže vybrat lepší text"
+      },
+      "submit": "Vygenerovat text ✨"
+    },
+    "tones": {
+      "cute": "Roztomilý",
+      "funny": "Vtipný",
+      "spicy": "Pikantní",
+      "sarcastic": "Sarkastický"
+    },
+    "result": {
+      "title": "Vygenerovaný text:",
+      "reshuffle": "🔄 Zkusit jiný text",
+      "continue": "Pokračovat na náhled →"
+    }
+  },
+  "preview": {
+    "title": "Tvá valentýnka je hotová! 🎉",
+    "backToEdit": "← Zpět na úpravy",
+    "card": {
+      "to": "Pro:",
+      "from": "Od:"
+    },
+    "actions": {
+      "download": "Stáhnout kartu 📥",
+      "share": "Sdílet 🔗"
+    },
+    "downloadSoon": "Stahování bude v další verzi 🚧",
+    "linkCopied": "Odkaz zkopírován do schránky! 📋"
+  },
+  "errors": {
+    "selectTemplate": "Vyber šablonu",
+    "maxLength": "Max {max} znaků",
+    "blockedContent": "Text obsahuje nevhodný obsah"
+  },
+  "aria": {
+    "templateGallery": "Výběr šablony valentýnky",
+    "templateOption": "Šablona: {name}"
+  }
+}
