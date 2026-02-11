@@ -1,6 +1,29 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getTemplateById } from "@/lib/content";
+import PreviewPageClient from "./PreviewPageClient";
 
-export default function PreviewPage() {
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}
+
+export default async function PreviewPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const templateId = params.t;
+  const toName = params.to || "";
+  const fromName = params.from || "Anonym";
+  const text = params.text || "";
+
+  // Redirect if missing required data
+  if (!templateId || !text) {
+    redirect("/create");
+  }
+
+  const template = getTemplateById(templateId);
+  if (!template) {
+    redirect("/create");
+  }
+
   return (
     <main className="py-12">
       <div className="mb-8">
@@ -13,25 +36,15 @@ export default function PreviewPage() {
       </div>
 
       <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-8 text-center">
-        Náhled karty
+        Tvá valentýnka je hotová! 🎉
       </h1>
 
-      {/* Placeholder pro preview karty */}
-      <div className="bg-white rounded-2xl shadow-lg aspect-[3/4] max-w-md mx-auto mb-8 flex items-center justify-center">
-        <div className="text-center text-gray-400">
-          <span className="text-8xl block mb-4">💝</span>
-          <p>Zde bude náhled karty (T1.6 - T1.7)</p>
-        </div>
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <button className="bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-lg">
-          Stáhnout kartu 📥
-        </button>
-        <button className="bg-white hover:bg-gray-50 text-rose-500 font-semibold py-3 px-8 rounded-full transition-colors shadow-lg border border-rose-200">
-          Sdílet 🔗
-        </button>
-      </div>
+      <PreviewPageClient
+        template={template}
+        toName={toName}
+        fromName={fromName}
+        text={text}
+      />
     </main>
   );
 }
