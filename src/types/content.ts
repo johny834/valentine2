@@ -1,4 +1,4 @@
-export type Tone = "cute" | "funny" | "spicy" | "sarcastic";
+export type Tone = "cute" | "funny" | "spicy" | "office";
 
 export interface TextEntry {
   id: string;

@@ -28,9 +28,9 @@ describe("textSelector", () => {
     });
 
     it("falls back to random when no keyword match", () => {
-      const result = selectText({ tone: "sarcastic", keywords: "xyz123nonexistent" });
+      const result = selectText({ tone: "office", keywords: "xyz123nonexistent" });
       expect(result).not.toBeNull();
-      expect(result?.tone).toBe("sarcastic");
+      expect(result?.tone).toBe("office");
     });
   });
 

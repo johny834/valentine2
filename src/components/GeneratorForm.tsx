@@ -23,7 +23,7 @@ const TONES: { value: Tone; label: string; emoji: string }[] = [
   { value: "cute", label: "Roztomilý", emoji: "🥰" },
   { value: "funny", label: "Vtipný", emoji: "😄" },
   { value: "spicy", label: "Pikantní", emoji: "🔥" },
-  { value: "sarcastic", label: "Sarkastický", emoji: "🙃" },
+  { value: "office", label: "The Office", emoji: "📋" },
 ];
 
 export default function GeneratorForm({ templates, onGenerate }: GeneratorFormProps) {

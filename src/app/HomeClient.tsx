@@ -1,55 +1,41 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import type { Template, Tone } from "@/types/content";
+import type { Template, Tone, TextEntry } from "@/types/content";
 import { MAX_LENGTHS, containsBlockedContent } from "@/lib/validation";
-import { selectText, reshuffleText } from "@/lib/textSelector";
+import { loadTexts } from "@/lib/content";
 
 interface Props {
   templates: Template[];
 }
 
-const TONES: { value: Tone; label: string; emoji: string }[] = [
-  { value: "cute", label: "Roztomilý", emoji: "🥰" },
-  { value: "funny", label: "Vtipný", emoji: "😄" },
-  { value: "spicy", label: "Pikantní", emoji: "🔥" },
-  { value: "sarcastic", label: "Sarkastický", emoji: "🙃" },
+const CATEGORIES: { tone: Tone; label: string; emoji: string }[] = [
+  { tone: "funny", label: "Vtipné", emoji: "😄" },
+  { tone: "cute", label: "Romantické", emoji: "💕" },
+  { tone: "spicy", label: "Spicy", emoji: "🔥" },
+  { tone: "office", label: "The Office", emoji: "📋" },
 ];
 
 export default function HomeClient({ templates }: Props) {
-  const [selectedTemplate, setSelectedTemplate] = useState<Template>(templates[0]);
+  const defaultTemplate = templates[0];
+  const allTexts = loadTexts();
+  
   const [fromName, setFromName] = useState("");
   const [toName, setToName] = useState("");
   const [customMessage, setCustomMessage] = useState("");
-  const [tone, setTone] = useState<Tone>("funny");
-  const [generatedText, setGeneratedText] = useState<string | null>(null);
-  const [lastTextId, setLastTextId] = useState<string | null>(null);
+  const [selectedText, setSelectedText] = useState<TextEntry | null>(null);
+  const [activeCategory, setActiveCategory] = useState<Tone>("funny");
 
   // Live preview values
   const displayFrom = fromName.trim() || "Tajný ctitel";
   const displayTo = toName.trim() || "Tebe";
-  const displayText = customMessage.trim() || generatedText || "Klikni na 'Vygenerovat text' a uvidíš kouzlo ✨";
+  const displayText = customMessage.trim() || selectedText?.text || "Vyber text z galerie nebo napiš vlastní ✨";
+  const currentTone = selectedText?.tone || "funny";
 
-  const handleGenerate = () => {
-    const text = selectText({
-      tone,
-      keywords: customMessage,
-      excludeIds: lastTextId ? [lastTextId] : [],
-    });
-    if (text) {
-      setGeneratedText(text.text);
-      setLastTextId(text.id);
-      setCustomMessage(""); // Clear custom message when generating
-    }
-  };
-
-  const handleReshuffle = () => {
-    const text = reshuffleText({ tone, keywords: "" }, lastTextId || undefined);
-    if (text) {
-      setGeneratedText(text.text);
-      setLastTextId(text.id);
-    }
+  const handleTextSelect = (text: TextEntry) => {
+    setSelectedText(text);
+    setCustomMessage(""); // Clear custom when selecting from gallery
   };
 
   const handleShare = async () => {
@@ -76,184 +62,168 @@ export default function HomeClient({ templates }: Props) {
 
   const hasError = containsBlockedContent(fromName) || containsBlockedContent(toName) || containsBlockedContent(customMessage);
 
+  // Get texts for active category
+  const categoryTexts = allTexts.filter(t => t.tone === activeCategory);
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-      {/* Left: Form */}
-      <div className="space-y-6">
-        {/* Names */}
-        <div className="bg-white/80 backdrop-blur rounded-3xl p-6 shadow-lg">
-          <h3 className="font-display text-xl font-bold text-[#2d1f1a] mb-4">
-            Personalizace
-          </h3>
-          
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-semibold text-[#5c4038] mb-2">
-                Od koho
-              </label>
-              <input
-                type="text"
-                value={fromName}
-                onChange={(e) => setFromName(e.target.value)}
-                placeholder="Tajný ctitel"
-                maxLength={MAX_LENGTHS.fromName}
-                className="input-field"
-              />
+    <div className="space-y-8">
+      {/* Main area: Form + Preview */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        {/* Left: Form */}
+        <div className="space-y-6">
+          {/* Names */}
+          <div className="bg-white/80 backdrop-blur rounded-3xl p-6 shadow-lg">
+            <h3 className="font-display text-xl font-bold text-[#2d1f1a] mb-4">
+              Personalizace
+            </h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-[#5c4038] mb-2">
+                  Od koho
+                </label>
+                <input
+                  type="text"
+                  value={fromName}
+                  onChange={(e) => setFromName(e.target.value)}
+                  placeholder="Tajný ctitel"
+                  maxLength={MAX_LENGTHS.fromName}
+                  className="input-field"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-[#5c4038] mb-2">
+                  Pro koho
+                </label>
+                <input
+                  type="text"
+                  value={toName}
+                  onChange={(e) => setToName(e.target.value)}
+                  placeholder="Tebe"
+                  maxLength={MAX_LENGTHS.toName}
+                  className="input-field"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[#5c4038] mb-2">
+                  Vlastní vzkaz <span className="font-normal text-[#a08070]">(nebo vyber z galerie)</span>
+                </label>
+                <textarea
+                  value={customMessage}
+                  onChange={(e) => {
+                    setCustomMessage(e.target.value);
+                    if (e.target.value) setSelectedText(null);
+                  }}
+                  placeholder="Napiš vlastní text..."
+                  maxLength={MAX_LENGTHS.message}
+                  rows={3}
+                  className="input-field resize-none"
+                />
+                <p className="text-right text-xs text-[#a08070] mt-1">
+                  {customMessage.length}/{MAX_LENGTHS.message}
+                </p>
+              </div>
+            </div>
+
+            {hasError && (
+              <p className="text-red-500 text-sm mt-2">Text obsahuje nevhodný obsah</p>
+            )}
+          </div>
+        </div>
+
+        {/* Right: Live Preview Card */}
+        <div className="lg:sticky lg:top-8">
+          <div className="valentine-card">
+            {/* Card art */}
+            <div className="h-48 sm:h-56 bg-gradient-to-br from-[#ffdde1] to-[#ee9ca7] flex items-center justify-center">
+              <div className="relative w-32 h-32 sm:w-40 sm:h-40">
+                <Image
+                  src={defaultTemplate.illustrationPath}
+                  alt={defaultTemplate.name}
+                  fill
+                  className="object-contain drop-shadow-lg"
+                />
+              </div>
             </div>
             
-            <div>
-              <label className="block text-sm font-semibold text-[#5c4038] mb-2">
-                Pro koho
-              </label>
-              <input
-                type="text"
-                value={toName}
-                onChange={(e) => setToName(e.target.value)}
-                placeholder="Tebe"
-                maxLength={MAX_LENGTHS.toName}
-                className="input-field"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-[#5c4038] mb-2">
-                Vlastní vzkaz <span className="font-normal text-[#a08070]">(nebo nech vygenerovat)</span>
-              </label>
-              <textarea
-                value={customMessage}
-                onChange={(e) => setCustomMessage(e.target.value)}
-                placeholder="Napiš vlastní text nebo klikni na Vygenerovat..."
-                maxLength={MAX_LENGTHS.message}
-                rows={3}
-                className="input-field resize-none"
-              />
-              <p className="text-right text-xs text-[#a08070] mt-1">
-                {customMessage.length}/{MAX_LENGTHS.message}
+            {/* Card body */}
+            <div className="p-6 sm:p-8">
+              <p className="text-sm font-semibold text-[#a24b4b] mb-1">
+                Pro <span className="text-[#2d1f1a]">{displayTo}</span>
               </p>
+              
+              <p className="font-display text-xl sm:text-2xl font-bold text-[#2d1f1a] my-4 leading-snug">
+                {displayText}
+              </p>
+              
+              <p className="text-sm font-semibold text-[#a24b4b] text-right">
+                S láskou, <span className="text-[#2d1f1a]">{displayFrom}</span>
+              </p>
+
+              {/* Badge */}
+              <div className="mt-4 inline-block bg-[#2d1f1a] text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider">
+                {CATEGORIES.find(c => c.tone === currentTone)?.label} {CATEGORIES.find(c => c.tone === currentTone)?.emoji}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Tone selection */}
-        <div className="bg-white/80 backdrop-blur rounded-3xl p-6 shadow-lg">
-          <h3 className="font-display text-xl font-bold text-[#2d1f1a] mb-4">
-            Tón vzkazu
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {TONES.map((t) => (
-              <button
-                key={t.value}
-                type="button"
-                onClick={() => setTone(t.value)}
-                className={`p-3 rounded-xl border-2 transition-all ${
-                  tone === t.value
-                    ? "border-[#f04f5f] bg-[#fff0ed]"
-                    : "border-[#e0c2b3] hover:border-[#f04f5f]/50"
-                }`}
-              >
-                <span className="text-2xl block mb-1">{t.emoji}</span>
-                <span className="text-sm font-medium text-[#2d1f1a]">{t.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Template selection */}
-        <div className="bg-white/80 backdrop-blur rounded-3xl p-6 shadow-lg">
-          <h3 className="font-display text-xl font-bold text-[#2d1f1a] mb-4">
-            Šablona
-          </h3>
-          <div className="grid grid-cols-3 gap-3">
-            {templates.map((template) => (
-              <button
-                key={template.id}
-                type="button"
-                onClick={() => setSelectedTemplate(template)}
-                className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
-                  selectedTemplate.id === template.id
-                    ? "border-[#f04f5f] shadow-lg scale-105"
-                    : "border-transparent hover:border-[#f04f5f]/50"
-                }`}
-              >
-                <Image
-                  src={template.illustrationPath}
-                  alt={template.name}
-                  fill
-                  className="object-contain p-2 bg-gradient-to-br from-[#ffe4dd] to-[#ffd4c8]"
-                />
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-wrap gap-3">
-          <button
-            onClick={handleGenerate}
-            disabled={hasError}
-            className="btn-primary flex-1 disabled:opacity-50"
-          >
-            ✨ Vygenerovat text
-          </button>
-          {generatedText && (
+          {/* Share button */}
+          <div className="mt-4">
             <button
-              onClick={handleReshuffle}
-              className="btn-secondary"
+              onClick={handleShare}
+              className="btn-primary w-full"
             >
-              🔄 Jiný
+              📤 Sdílet valentýnku
             </button>
-          )}
+          </div>
         </div>
-
-        {hasError && (
-          <p className="text-red-500 text-sm">Text obsahuje nevhodný obsah</p>
-        )}
       </div>
 
-      {/* Right: Live Preview Card */}
-      <div className="lg:sticky lg:top-8">
-        <div className="valentine-card">
-          {/* Card art */}
-          <div className="h-48 sm:h-56 bg-gradient-to-br from-[#ffdde1] to-[#ee9ca7] flex items-center justify-center">
-            <div className="relative w-32 h-32 sm:w-40 sm:h-40">
-              <Image
-                src={selectedTemplate.illustrationPath}
-                alt={selectedTemplate.name}
-                fill
-                className="object-contain drop-shadow-lg"
-              />
-            </div>
-          </div>
-          
-          {/* Card body */}
-          <div className="p-6 sm:p-8">
-            <p className="text-sm font-semibold text-[#a24b4b] mb-1">
-              Pro <span className="text-[#2d1f1a]">{displayTo}</span>
-            </p>
-            
-            <p className="font-display text-xl sm:text-2xl font-bold text-[#2d1f1a] my-4 leading-snug">
-              {displayText}
-            </p>
-            
-            <p className="text-sm font-semibold text-[#a24b4b] text-right">
-              S láskou, <span className="text-[#2d1f1a]">{displayFrom}</span>
-            </p>
+      {/* Text Gallery */}
+      <div className="bg-white/80 backdrop-blur rounded-3xl p-6 shadow-lg">
+        <h3 className="font-display text-2xl font-bold text-[#2d1f1a] mb-2">
+          Galerie textů
+        </h3>
+        <p className="text-[#5c4038] mb-6">
+          Klikni na kartu a text se přenese do náhledu
+        </p>
 
-            {/* Badge */}
-            <div className="mt-4 inline-block bg-[#2d1f1a] text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider">
-              {TONES.find(t => t.value === tone)?.label} {TONES.find(t => t.value === tone)?.emoji}
-            </div>
-          </div>
+        {/* Category tabs */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.tone}
+              onClick={() => setActiveCategory(cat.tone)}
+              className={`px-4 py-2 rounded-full font-semibold text-sm transition-all ${
+                activeCategory === cat.tone
+                  ? "bg-[#2d1f1a] text-white"
+                  : "bg-[#ffe3cf] text-[#4e2c24] hover:bg-[#ffd4b8]"
+              }`}
+            >
+              {cat.emoji} {cat.label}
+            </button>
+          ))}
         </div>
 
-        {/* Share button */}
-        <div className="mt-4 flex gap-3">
-          <button
-            onClick={handleShare}
-            className="btn-primary flex-1"
-          >
-            📤 Sdílet valentýnku
-          </button>
+        {/* Text cards grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {categoryTexts.map((text) => (
+            <button
+              key={text.id}
+              onClick={() => handleTextSelect(text)}
+              className={`text-left p-4 rounded-2xl transition-all hover:scale-[1.02] ${
+                selectedText?.id === text.id
+                  ? "bg-[#fff0ed] ring-2 ring-[#f04f5f] shadow-lg"
+                  : "bg-white/60 hover:bg-white/80 shadow-md hover:shadow-lg"
+              }`}
+            >
+              <p className="text-[#2d1f1a] font-medium leading-snug">
+                {text.text}
+              </p>
+            </button>
+          ))}
         </div>
       </div>
     </div>
