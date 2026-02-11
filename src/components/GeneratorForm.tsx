@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import type { Template, Tone } from "@/types/content";
+import { MAX_LENGTHS, containsBlockedContent, escapeHtml } from "@/lib/validation";
 
 interface GeneratorFormProps {
   templates: Template[];
@@ -40,14 +41,25 @@ export default function GeneratorForm({ templates, onGenerate }: GeneratorFormPr
     if (!selectedTemplate) {
       newErrors.template = "Vyber šablonu";
     }
-    if (toName.length > 32) {
-      newErrors.toName = "Max 32 znaků";
+    if (toName.length > MAX_LENGTHS.toName) {
+      newErrors.toName = `Max ${MAX_LENGTHS.toName} znaků`;
     }
-    if (fromName.length > 32) {
-      newErrors.fromName = "Max 32 znaků";
+    if (fromName.length > MAX_LENGTHS.fromName) {
+      newErrors.fromName = `Max ${MAX_LENGTHS.fromName} znaků`;
     }
-    if (keywords.length > 140) {
-      newErrors.keywords = "Max 140 znaků";
+    if (keywords.length > MAX_LENGTHS.keywords) {
+      newErrors.keywords = `Max ${MAX_LENGTHS.keywords} znaků`;
+    }
+
+    // Check for blocked content
+    if (containsBlockedContent(toName)) {
+      newErrors.toName = "Text obsahuje nevhodný obsah";
+    }
+    if (containsBlockedContent(fromName)) {
+      newErrors.fromName = "Text obsahuje nevhodný obsah";
+    }
+    if (containsBlockedContent(keywords)) {
+      newErrors.keywords = "Text obsahuje nevhodný obsah";
     }
 
     setErrors(newErrors);
@@ -59,10 +71,10 @@ export default function GeneratorForm({ templates, onGenerate }: GeneratorFormPr
 
     onGenerate({
       templateId: selectedTemplate,
-      toName: toName.trim(),
-      fromName: isAnonymous ? "Anonym" : (fromName.trim() || "Anonym"),
+      toName: escapeHtml(toName.trim()),
+      fromName: isAnonymous ? "Anonym" : escapeHtml(fromName.trim() || "Anonym"),
       tone,
-      keywords: keywords.trim(),
+      keywords: escapeHtml(keywords.trim()),
       isAnonymous,
     });
   };
@@ -122,12 +134,19 @@ export default function GeneratorForm({ templates, onGenerate }: GeneratorFormPr
               value={toName}
               onChange={(e) => setToName(e.target.value)}
               placeholder="Např. Terezka"
-              maxLength={32}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-400 focus:border-transparent outline-none transition-all"
+              maxLength={MAX_LENGTHS.toName}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-400 focus:border-transparent outline-none transition-all ${
+                errors.toName ? "border-red-400" : "border-gray-300"
+              }`}
             />
-            {errors.toName && (
-              <p className="text-red-500 text-sm mt-1">{errors.toName}</p>
-            )}
+            <div className="flex justify-between text-sm mt-1">
+              {errors.toName ? (
+                <span className="text-red-500">{errors.toName}</span>
+              ) : (
+                <span />
+              )}
+              <span className="text-gray-400">{toName.length}/{MAX_LENGTHS.toName}</span>
+            </div>
           </div>
 
           <div>
@@ -140,15 +159,20 @@ export default function GeneratorForm({ templates, onGenerate }: GeneratorFormPr
               value={fromName}
               onChange={(e) => setFromName(e.target.value)}
               placeholder="Např. Tvůj tajný ctitel"
-              maxLength={32}
+              maxLength={MAX_LENGTHS.fromName}
               disabled={isAnonymous}
-              className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-400 focus:border-transparent outline-none transition-all ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-400 focus:border-transparent outline-none transition-all ${
                 isAnonymous ? "bg-gray-100 text-gray-400" : ""
-              }`}
+              } ${errors.fromName ? "border-red-400" : "border-gray-300"}`}
             />
-            {errors.fromName && (
-              <p className="text-red-500 text-sm mt-1">{errors.fromName}</p>
-            )}
+            <div className="flex justify-between text-sm mt-1">
+              {errors.fromName ? (
+                <span className="text-red-500">{errors.fromName}</span>
+              ) : (
+                <span />
+              )}
+              <span className="text-gray-400">{fromName.length}/{MAX_LENGTHS.fromName}</span>
+            </div>
           </div>
 
           <label className="flex items-center gap-2 cursor-pointer">
@@ -198,17 +222,20 @@ export default function GeneratorForm({ templates, onGenerate }: GeneratorFormPr
           value={keywords}
           onChange={(e) => setKeywords(e.target.value)}
           placeholder="Společný vtip, přezdívka, oblíbené jídlo..."
-          maxLength={140}
+          maxLength={MAX_LENGTHS.keywords}
           rows={3}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-400 focus:border-transparent outline-none transition-all resize-none"
+          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-400 focus:border-transparent outline-none transition-all resize-none ${
+            errors.keywords ? "border-red-400" : "border-gray-300"
+          }`}
         />
-        <div className="flex justify-between text-sm text-gray-400 mt-1">
-          <span>Pomůže vybrat lepší text</span>
-          <span>{keywords.length}/140</span>
+        <div className="flex justify-between text-sm mt-1">
+          {errors.keywords ? (
+            <span className="text-red-500">{errors.keywords}</span>
+          ) : (
+            <span className="text-gray-400">Pomůže vybrat lepší text</span>
+          )}
+          <span className="text-gray-400">{keywords.length}/{MAX_LENGTHS.keywords}</span>
         </div>
-        {errors.keywords && (
-          <p className="text-red-500 text-sm mt-1">{errors.keywords}</p>
-        )}
       </section>
 
       {/* Submit */}

@@ -1,0 +1,29 @@
+{
+  "words": [
+    "kurva",
+    "píča",
+    "kokot",
+    "debil",
+    "idiot",
+    "kretén",
+    "hajzl",
+    "svině",
+    "zkurvysyn",
+    "fuck",
+    "shit",
+    "asshole",
+    "bitch",
+    "cunt",
+    "dick",
+    "nazi",
+    "hitler",
+    "kill",
+    "murder",
+    "suicide"
+  ],
+  "patterns": [
+    "\\bkur[vw]\\w*",
+    "\\bpí[čc]\\w*",
+    "\\bhaj[sz]l\\w*"
+  ]
+}
