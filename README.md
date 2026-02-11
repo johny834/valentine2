@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Valentine2 💕
+
+Vytvoř jedinečnou valentýnku s krásnými ilustracemi a vtipnými texty. Žádné AI, jen láska a kreativita.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
+
+# Run tests
+npm test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+valentine2/
+├── content/
+│   ├── texts/texts.json    # Text entries by tone
+│   ├── templates.json      # Template definitions
+│   ├── copy.cs.json        # UI strings (Czech)
+│   └── blocklist.json      # Content moderation
+├── public/
+│   └── illustrations/      # SVG card illustrations
+├── src/
+│   ├── app/                # Next.js app router pages
+│   ├── components/         # React components
+│   ├── lib/                # Utilities (content, i18n, validation)
+│   └── types/              # TypeScript types
+└── vitest.config.ts        # Test configuration
+```
 
-## Learn More
+## Features (EPIC 1 - MVP)
 
-To learn more about Next.js, take a look at the following resources:
+- [x] Landing page with value proposition
+- [x] Template gallery with 3 illustrations
+- [x] Generator form (template, names, tone, keywords)
+- [x] Text selector engine with scoring
+- [x] Card preview with reveal animation
+- [x] URL-based data transfer
+- [x] Input validation + content safety
+- [x] Keyboard accessible components
+- [x] Czech UI copy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## QA Smoke Test Checklist
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Before release, manually verify:
 
-## Deploy on Vercel
+### Happy Path
+- [ ] Landing page loads → click "Vytvořit kartu"
+- [ ] /create page → select template → fill form → click "Vygenerovat text"
+- [ ] Text appears → click "Zkusit jiný text" → different text appears
+- [ ] Click "Pokračovat na náhled" → /preview shows card
+- [ ] Refresh /preview → card still visible (URL params preserved)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Edge Cases
+- [ ] Anonymous toggle → hides "Od koho" field, shows "Anonym" on card
+- [ ] Long text (>140 chars in keywords) → shows char counter, prevents overflow
+- [ ] Blocked content → shows "Text obsahuje nevhodný obsah" error
+- [ ] Missing template → shows "Vyber šablonu" error
+- [ ] Direct /preview access without params → redirects to /create
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Accessibility
+- [ ] Template gallery → keyboard navigation (arrow keys, Enter to select)
+- [ ] Form fields → proper labels and focus states
+- [ ] Error messages → visible and descriptive
+
+### Responsive
+- [ ] Mobile (375px) → single column layout, readable text
+- [ ] Tablet (768px) → 2-3 column grids
+- [ ] Desktop (1024px+) → full layout
+
+## Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm run test -- --coverage
+```
+
+Current test coverage:
+- `textSelector.ts` - 6 tests (tone filter, tag match, keyword scoring, fallback, reshuffle)
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Styling:** Tailwind CSS
+- **Language:** TypeScript
+- **Testing:** Vitest
+- **Fonts:** Nunito + Caveat (Google Fonts)
+
+## Content Customization
+
+### Adding Templates
+Edit `content/templates.json` and add SVG to `public/illustrations/`.
+
+### Adding Texts
+Edit `content/texts/texts.json`. Each entry needs:
+- `id` - unique identifier
+- `tone` - cute | funny | spicy | sarcastic
+- `tags` - array of keywords for matching
+- `text` - the actual message
+
+### Moderation
+Edit `content/blocklist.json` to add blocked words/patterns.
+
+---
+
+Made with ❤️ in Prague
