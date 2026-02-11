@@ -1,6 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
+import { loadTemplates } from "@/lib/content";
 
 export default function Home() {
+  const templates = loadTemplates();
+
   return (
     <main className="py-12 sm:py-20">
       {/* Hero */}
@@ -50,19 +54,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Preview galerie - placeholder */}
+      {/* Preview galerie */}
       <section className="mb-16">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-8">
           Ukázky šablon
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl aspect-[3/4] shadow-md flex items-center justify-center text-gray-400"
+          {templates.slice(0, 3).map((template) => (
+            <Link
+              key={template.id}
+              href="/create"
+              className="bg-white rounded-2xl aspect-[3/4] shadow-md flex flex-col items-center justify-center p-6 hover:shadow-lg transition-shadow group"
             >
-              <span className="text-6xl">💝</span>
-            </div>
+              <div className="relative w-full h-3/4 mb-4">
+                <Image
+                  src={template.illustrationPath}
+                  alt={template.name}
+                  fill
+                  className="object-contain group-hover:scale-105 transition-transform"
+                />
+              </div>
+              <p className="font-medium text-gray-700 group-hover:text-rose-500 transition-colors">
+                {template.name}
+              </p>
+            </Link>
           ))}
         </div>
       </section>
