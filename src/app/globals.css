@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: var(--font-nunito), system-ui, sans-serif;
+  --font-handwriting: var(--font-caveat), cursive;
+  
+  --color-primary: #e11d48;
+  --color-primary-light: #fb7185;
+  --color-primary-dark: #be123c;
+  --color-accent: #f43f5e;
+  --color-background: #fff1f2;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+.font-handwriting {
+  font-family: var(--font-handwriting);
+}
