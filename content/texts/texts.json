@@ -24,5 +24,11 @@
   { "id": "office-05", "tone": "office", "tags": ["dwight", "assistant"], "text": "Jsi assistant TO the regional manager mého srdce 📋❤️", "image": "/illustrations/office/dwight.jpg" },
   { "id": "office-06", "tone": "office", "tags": ["kevin", "chili"], "text": "Moje láska k tobě je jako Kevinovo chili - velká, chaotická, ale upřímná 🍲", "image": "/illustrations/office/michael.jpg" },
   { "id": "office-07", "tone": "office", "tags": ["stanley", "pretzel"], "text": "Těším se na tebe víc než Stanley na Pretzel Day 🥨", "image": "/illustrations/office/michael2.jpg" },
-  { "id": "office-08", "tone": "office", "tags": ["michael", "friend"], "text": "Jsi můj nejlepší přítel. A víc než přítel. A ještě víc. 💘", "image": "/illustrations/office/michael.jpg" }
+  { "id": "office-08", "tone": "office", "tags": ["michael", "friend"], "text": "Jsi můj nejlepší přítel. A víc než přítel. A ještě víc. 💘", "image": "/illustrations/office/michael.jpg" },
+
+  { "id": "taylor-01", "tone": "taylor", "tags": ["song", "music"], "text": "Nechci se o tebe s nikým dělit, jsi jak song od Taylor Swift – nejde tě vypnout. 🎵", "image": "/illustrations/taylor.jpg" },
+  { "id": "taylor-02", "tone": "taylor", "tags": ["guitar", "love"], "text": "Miluju tě víc než Taylor Swift svojí kytaru. 🎸💕", "image": "/illustrations/taylor.jpg" },
+  { "id": "taylor-03", "tone": "taylor", "tags": ["eras", "tour"], "text": "Chci s tebou být déle než trvalo Eras Tour. 💜", "image": "/illustrations/taylor.jpg" },
+  { "id": "taylor-04", "tone": "taylor", "tags": ["song", "rhythm"], "text": "Můj život získal správný rytmus a kmit, jsi prostě pecka jak song od Taylor Swift. 🎶", "image": "/illustrations/taylor.jpg" },
+  { "id": "taylor-05", "tone": "taylor", "tags": ["antihero", "lover"], "text": "Nechci být Anti-Hero, co v koutě jen stojí, chci být tvůj Lover, co se tě nebojí. 💗", "image": "/illustrations/taylor.jpg" }
 ]

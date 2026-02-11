@@ -15,6 +15,7 @@ const CATEGORIES: { tone: Tone; label: string; emoji: string }[] = [
   { tone: "cute", label: "Romantické", emoji: "💕" },
   { tone: "spicy", label: "Spicy", emoji: "🔥" },
   { tone: "office", label: "The Office", emoji: "📋" },
+  { tone: "taylor", label: "Taylor Swift", emoji: "🎤" },
 ];
 
 export default function HomeClient({ templates }: Props) {
