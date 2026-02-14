@@ -17,18 +17,18 @@ export default function CreatePageClient({ templates }: Props) {
 
   const handleGenerate = (data: FormData) => {
     setFormData(data);
-    
+
     const text = selectText({
       tone: data.tone,
       keywords: data.keywords,
     });
-    
+
     setSelectedText(text);
   };
 
   const handleReshuffle = () => {
     if (!formData) return;
-    
+
     const text = reshuffleText(
       {
         tone: formData.tone,
@@ -36,13 +36,13 @@ export default function CreatePageClient({ templates }: Props) {
       },
       selectedText?.id
     );
-    
+
     setSelectedText(text);
   };
 
   const handleContinue = () => {
     if (!formData || !selectedText) return;
-    
+
     // Serialize to URL params for preview
     const params = new URLSearchParams({
       t: formData.templateId,
@@ -51,7 +51,11 @@ export default function CreatePageClient({ templates }: Props) {
       tone: formData.tone,
       text: selectedText.text,
     });
-    
+
+    if (selectedText.image) {
+      params.set("img", selectedText.image);
+    }
+
     router.push(`/preview?${params.toString()}`);
   };
 
