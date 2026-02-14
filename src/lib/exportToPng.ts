@@ -82,23 +82,35 @@ export async function exportElementToPng(element: HTMLElement): Promise<string> 
   const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
   const url = URL.createObjectURL(svgBlob);
 
-  return new Promise<string>((resolve, reject) => {
+  return new Promise<Blob>((resolve, reject) => {
     image.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = Math.round(width * 2);
-      canvas.height = Math.round(height * 2);
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(width * 2);
+        canvas.height = Math.round(height * 2);
 
-      const context = canvas.getContext("2d");
-      if (!context) {
+        const context = canvas.getContext("2d");
+        if (!context) {
+          reject(new Error("Canvas context not available"));
+          return;
+        }
+
+        context.scale(2, 2);
+        context.drawImage(image, 0, 0);
+
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error("Blob export failed"));
+            return;
+          }
+
+          resolve(blob);
+        }, "image/png");
+      } catch {
+        reject(new Error("Image export failed"));
+      } finally {
         URL.revokeObjectURL(url);
-        reject(new Error("Canvas context not available"));
-        return;
       }
-
-      context.scale(2, 2);
-      context.drawImage(image, 0, 0);
-      URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL("image/png"));
     };
 
     image.onerror = () => {
@@ -108,4 +120,9 @@ export async function exportElementToPng(element: HTMLElement): Promise<string> 
 
     image.src = url;
   });
+}
+
+export async function exportElementToPng(element: HTMLElement): Promise<string> {
+  const blob = await exportElementToPngBlob(element);
+  return blobToDataUrl(blob);
 }

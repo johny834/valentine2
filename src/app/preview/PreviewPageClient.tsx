@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import type { Template, Tone } from "@/types/content";
-import { exportElementToPng } from "@/lib/exportToPng";
+import { exportElementToPngBlob } from "@/lib/exportToPng";
 
 interface Props {
   template: Template;
@@ -42,11 +42,15 @@ export default function PreviewPageClient({
 
     try {
       setIsSaving(true);
-      const dataUrl = await exportElementToPng(cardRef.current);
+      const pngBlob = await exportElementToPngBlob(cardRef.current);
+      const downloadUrl = URL.createObjectURL(pngBlob);
       const link = document.createElement("a");
       link.download = "valentynka-nahled.png";
-      link.href = dataUrl;
+      link.href = downloadUrl;
+      document.body.appendChild(link);
       link.click();
+      link.remove();
+      URL.revokeObjectURL(downloadUrl);
     } catch {
       alert("Kartu se nepodařilo uložit. Zkus to prosím znovu.");
     } finally {
