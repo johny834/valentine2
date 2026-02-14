@@ -84,11 +84,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const sanitizedImagePath = body.imagePath?.trim();
+    const hasCustomIllustration = Boolean(
+      sanitizedImagePath && sanitizedImagePath.startsWith("/illustrations/")
+    );
+
     // Build template snapshot
     const templateSnapshot: TemplateSnapshot = {
       id: template.id,
       name: template.name,
-      illustrationPath: template.illustrationPath,
+      illustrationPath: hasCustomIllustration
+        ? sanitizedImagePath as string
+        : template.illustrationPath,
       styleTokens: template.styleTokens as TemplateSnapshot["styleTokens"],
     };
 
@@ -104,7 +111,7 @@ export async function POST(request: NextRequest) {
       is_anonymous: body.isAnonymous ?? false,
       tone: body.tone,
       message_text: escapeHtml(body.messageText.trim()),
-      image_path: body.imagePath ?? null,
+      image_path: hasCustomIllustration ? sanitizedImagePath : null,
     };
 
     // Insert into database
