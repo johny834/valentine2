@@ -19,10 +19,57 @@ function inlineStyles(source: Element, target: Element) {
   });
 }
 
+function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === "string") {
+        resolve(reader.result);
+        return;
+      }
+
+      reject(new Error("Failed to convert blob to data URL"));
+    };
+    reader.onerror = () => reject(new Error("Failed to read blob"));
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function inlineImageSources(sourceRoot: HTMLElement, targetRoot: HTMLElement): Promise<void> {
+  const sourceImages = Array.from(sourceRoot.querySelectorAll("img"));
+  const targetImages = Array.from(targetRoot.querySelectorAll("img"));
+
+  await Promise.all(
+    sourceImages.map(async (sourceImage, index) => {
+      const targetImage = targetImages[index];
+      const sourceUrl = sourceImage.currentSrc || sourceImage.src;
+
+      if (!targetImage || !sourceUrl) {
+        return;
+      }
+
+      try {
+        const response = await fetch(sourceUrl, { cache: "force-cache" });
+        if (!response.ok) {
+          throw new Error("Image request failed");
+        }
+
+        const dataUrl = await blobToDataUrl(await response.blob());
+        targetImage.src = dataUrl;
+        targetImage.removeAttribute("srcset");
+      } catch {
+        targetImage.src = sourceUrl;
+        targetImage.removeAttribute("srcset");
+      }
+    }),
+  );
+}
+
 export async function exportElementToPng(element: HTMLElement): Promise<string> {
   const { width, height } = element.getBoundingClientRect();
   const clonedElement = element.cloneNode(true) as HTMLElement;
   inlineStyles(element, clonedElement);
+  await inlineImageSources(element, clonedElement);
 
   const serializedNode = new XMLSerializer().serializeToString(clonedElement);
   const svg = `
