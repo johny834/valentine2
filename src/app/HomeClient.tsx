@@ -55,6 +55,10 @@ export default function HomeClient({ templates }: Props) {
       text: displayText,
     });
 
+    if (selectedImage) {
+      params.set("img", selectedImage);
+    }
+
     window.location.href = `/preview?${params.toString()}`;
   };
 
