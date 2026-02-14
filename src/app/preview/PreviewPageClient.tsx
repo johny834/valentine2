@@ -1,17 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import CardPreview from "@/components/CardPreview";
-import type { Template } from "@/types/content";
+import type { Template, Tone } from "@/types/content";
 
 interface Props {
   template: Template;
   toName: string;
   fromName: string;
   text: string;
-  tone: string;
+  tone: Tone;
+  imagePath?: string;
 }
+
+const CATEGORIES: { tone: Tone; label: string; emoji: string }[] = [
+  { tone: "funny", label: "Vtipné", emoji: "😄" },
+  { tone: "cute", label: "Romantické", emoji: "💕" },
+  { tone: "spicy", label: "Spicy", emoji: "🔥" },
+  { tone: "office", label: "The Office", emoji: "📋" },
+  { tone: "taylor", label: "Taylor Swift", emoji: "🎤" },
+];
 
 export default function PreviewPageClient({
   template,
@@ -19,9 +28,12 @@ export default function PreviewPageClient({
   fromName,
   text,
   tone,
+  imagePath,
 }: Props) {
   const router = useRouter();
   const [isSending, setIsSending] = useState(false);
+
+  const displayImage = imagePath || template.illustrationPath;
 
   const handleSendSurprise = async () => {
     if (isSending) return;
@@ -41,6 +53,7 @@ export default function PreviewPageClient({
           tone,
           messageText: text,
           isAnonymous: fromName === "Anonym",
+          imagePath: imagePath || undefined,
         }),
       });
 
@@ -61,12 +74,37 @@ export default function PreviewPageClient({
   return (
     <>
       <div className="mb-8">
-        <CardPreview
-          template={template}
-          toName={toName || undefined}
-          fromName={fromName}
-          text={text}
-        />
+        <div className="valentine-card max-w-2xl mx-auto">
+          <div className="h-[28rem] sm:h-[34rem] bg-gradient-to-br from-[#ffdde1] to-[#ee9ca7] flex items-center justify-center overflow-hidden">
+            <div className={`relative ${imagePath ? "w-full h-full" : "w-48 h-48 sm:w-56 sm:h-56"}`}>
+              <Image
+                src={displayImage}
+                alt="Valentine card"
+                fill
+                className={imagePath ? "object-cover" : "object-contain drop-shadow-lg"}
+                priority
+              />
+            </div>
+          </div>
+
+          <div className="p-8 sm:p-10">
+            <p className="text-base font-semibold text-[#a24b4b] mb-2">
+              Pro <span className="text-[#2d1f1a]">{toName}</span>
+            </p>
+
+            <p className="font-display text-3xl sm:text-4xl font-bold text-[#2d1f1a] my-6 leading-snug">
+              {text}
+            </p>
+
+            <p className="text-base font-semibold text-[#a24b4b] text-right">
+              S láskou, <span className="text-[#2d1f1a]">{fromName}</span>
+            </p>
+
+            <div className="mt-5 inline-block bg-[#2d1f1a] text-white px-4 py-1.5 rounded-full text-sm uppercase tracking-wider">
+              {CATEGORIES.find((c) => c.tone === tone)?.label} {CATEGORIES.find((c) => c.tone === tone)?.emoji}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">

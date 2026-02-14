@@ -9,6 +9,7 @@ interface CardPreviewProps {
   toName?: string;
   fromName?: string;
   text: string;
+  imagePath?: string;
   size?: "default" | "large";
 }
 
@@ -17,6 +18,7 @@ export default function CardPreview({
   toName,
   fromName,
   text,
+  imagePath,
   size = "default",
 }: CardPreviewProps) {
   const [isRevealed, setIsRevealed] = useState(false);
@@ -32,6 +34,7 @@ export default function CardPreview({
     : "";
 
   const isLarge = size === "large";
+  const displayImage = imagePath || template.illustrationPath;
 
   return (
     <div
@@ -57,7 +60,7 @@ export default function CardPreview({
         {/* Illustration */}
         <div className="relative flex-shrink-0 h-1/2 mb-4">
           <Image
-            src={template.illustrationPath}
+            src={displayImage}
             alt={template.name}
             fill
             className={`
