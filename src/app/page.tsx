@@ -12,11 +12,11 @@ export default function Home() {
           ✨ Digi-Valentýnka 💘
         </p>
         <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#2d1f1a] mb-4 leading-tight">
-          Dokaž, že máš vkus — údernou valentýnkou
+          Prolom ledy s jedinečkou valentýnkou!
         </h1>
         <p className="text-lg text-[#5c4038] max-w-2xl mx-auto leading-relaxed">
-          Zapomeň na univerzální básničky z internetu. Vytvoř valentýnku, která má vtip, jiskru a tvoji DNA. 
-          <span className="block mt-2 font-medium text-[#2d1f1a]">Ať už jde o tajnou lásku, čerstvý vztah nebo manželství, kde už si nic nedarujete — s tímhle zaskóruješ!</span>
+          Zapomeň na univerzální básničky z internetu. Vytvoř valentýnku, která má jiskru a vtip. 
+        
         </p>
       </header>
 
