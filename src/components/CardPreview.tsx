@@ -41,7 +41,7 @@ export default function CardPreview({
       className={`
         relative bg-white rounded-3xl shadow-2xl overflow-hidden
         aspect-[3/4] mx-auto
-        ${isLarge ? "max-w-xl" : "max-w-md"}
+        ${isLarge ? "max-w-[28.8rem]" : "max-w-md"}
         transition-all duration-700 ease-out
         ${isRevealed ? "opacity-100 scale-100" : "opacity-0 scale-95"}
       `}
