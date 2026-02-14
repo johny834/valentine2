@@ -3,6 +3,7 @@ import { getServiceSupabase } from "@/lib/supabase";
 import { generateToken } from "@/lib/token";
 import { containsBlockedContent, escapeHtml, MAX_LENGTHS } from "@/lib/validation";
 import templates from "../../../../content/templates.json";
+import texts from "../../../../content/texts/texts.json";
 import type { CardInsert, TemplateSnapshot, CreateCardResponse } from "@/types/database";
 
 const VALID_TONES = ["cute", "funny", "spicy", "office", "taylor"] as const;
@@ -84,11 +85,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const sanitizedImagePath = body.imagePath?.trim();
+    const inferredImagePath = texts.find((entry) => (
+      entry.tone === body.tone && entry.text === body.messageText && entry.image
+    ))?.image;
+    const candidateImagePath = sanitizedImagePath || inferredImagePath;
+    const hasCustomIllustration = Boolean(
+      candidateImagePath && candidateImagePath.startsWith("/illustrations/")
+    );
+
     // Build template snapshot
     const templateSnapshot: TemplateSnapshot = {
       id: template.id,
       name: template.name,
-      illustrationPath: template.illustrationPath,
+      illustrationPath: hasCustomIllustration
+        ? candidateImagePath as string
+        : template.illustrationPath,
       styleTokens: template.styleTokens as TemplateSnapshot["styleTokens"],
     };
 
@@ -104,7 +116,7 @@ export async function POST(request: NextRequest) {
       is_anonymous: body.isAnonymous ?? false,
       tone: body.tone,
       message_text: escapeHtml(body.messageText.trim()),
-      image_path: body.imagePath ?? null,
+      image_path: hasCustomIllustration ? candidateImagePath : null,
     };
 
     // Insert into database
