@@ -25,7 +25,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="text-center text-[#5c4038] text-sm mt-16 pt-8 border-t border-[#e0c2b3]">
-        <p>🔥 Make it hot (but safe) — digitální důkaz lásky, co v koši neskončí.</p>
+        <p>Vibe-coded with love ❤️</p>
       </footer>
     </main>
   );
