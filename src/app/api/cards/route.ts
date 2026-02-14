@@ -3,6 +3,7 @@ import { getServiceSupabase } from "@/lib/supabase";
 import { generateToken } from "@/lib/token";
 import { containsBlockedContent, escapeHtml, MAX_LENGTHS } from "@/lib/validation";
 import templates from "../../../../content/templates.json";
+import texts from "../../../../content/texts/texts.json";
 import type { CardInsert, TemplateSnapshot, CreateCardResponse } from "@/types/database";
 
 const VALID_TONES = ["cute", "funny", "spicy", "office", "taylor"] as const;

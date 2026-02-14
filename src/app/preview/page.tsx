@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getTemplateById } from "@/lib/content";
+import { getTemplateById, loadTexts } from "@/lib/content";
 import PreviewPageClient from "./PreviewPageClient";
 import type { Tone } from "@/types/content";
 
