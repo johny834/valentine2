@@ -9,9 +9,9 @@
   --shadow: 0 20px 60px rgba(37, 19, 12, 0.15);
   --radius: 24px;
   
-  --font-sans: var(--font-nunito), system-ui, sans-serif;
-  --font-display: var(--font-playfair), Georgia, serif;
-  --font-handwriting: var(--font-caveat), cursive;
+  --font-sans: "Nunito", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-handwriting: "Caveat", "Brush Script MT", cursive;
 }
 
 body {
