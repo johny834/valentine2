@@ -48,6 +48,7 @@ export default function CreatePageClient({ templates }: Props) {
       t: formData.templateId,
       to: formData.toName,
       from: formData.fromName,
+      tone: formData.tone,
       text: selectedText.text,
     });
     

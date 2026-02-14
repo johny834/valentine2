@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import CardPreview from "@/components/CardPreview";
 import type { Template } from "@/types/content";
 
@@ -8,6 +10,7 @@ interface Props {
   toName: string;
   fromName: string;
   text: string;
+  tone: string;
 }
 
 export default function PreviewPageClient({
@@ -15,27 +18,44 @@ export default function PreviewPageClient({
   toName,
   fromName,
   text,
+  tone,
 }: Props) {
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Moje valentýnka 💕",
-          text: text,
-          url: window.location.href,
-        });
-      } catch {
-        // User cancelled or share failed
-        copyToClipboard();
-      }
-    } else {
-      copyToClipboard();
-    }
-  };
+  const router = useRouter();
+  const [isSending, setIsSending] = useState(false);
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Odkaz zkopírován do schránky! 📋");
+  const handleSendSurprise = async () => {
+    if (isSending) return;
+
+    setIsSending(true);
+
+    try {
+      const response = await fetch("/api/cards", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          templateId: template.id,
+          toName,
+          fromName,
+          tone,
+          messageText: text,
+          isAnonymous: fromName === "Anonym",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.publicUrl) {
+        throw new Error(result.error || "Nepodařilo se vytvořit sdílený odkaz");
+      }
+
+      router.push(result.publicUrl);
+    } catch {
+      alert("Nepodařilo se vytvořit sdílený odkaz. Zkus to prosím znovu.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -51,16 +71,11 @@ export default function PreviewPageClient({
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
         <button
-          onClick={() => alert("Stahování bude v další verzi 🚧")}
-          className="flex-1 bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-6 rounded-full transition-colors shadow-lg"
+          onClick={handleSendSurprise}
+          disabled={isSending}
+          className="flex-1 bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-full transition-colors shadow-lg"
         >
-          Stáhnout kartu 📥
-        </button>
-        <button
-          onClick={handleShare}
-          className="flex-1 bg-white hover:bg-gray-50 text-rose-500 font-semibold py-3 px-6 rounded-full transition-colors shadow-lg border border-rose-200"
-        >
-          Sdílet 🔗
+          {isSending ? "Posílám překvápko..." : "Poslat překvápko 💌"}
         </button>
       </div>
     </>

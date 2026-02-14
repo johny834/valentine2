@@ -13,6 +13,7 @@ export default async function PreviewPage({ searchParams }: PageProps) {
   const toName = params.to || "";
   const fromName = params.from || "Anonym";
   const text = params.text || "";
+  const tone = params.tone || "cute";
 
   // Redirect if missing required data
   if (!templateId || !text) {
@@ -44,6 +45,7 @@ export default async function PreviewPage({ searchParams }: PageProps) {
         toName={toName}
         fromName={fromName}
         text={text}
+        tone={tone}
       />
     </main>
   );

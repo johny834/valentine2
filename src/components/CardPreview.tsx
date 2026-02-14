@@ -9,6 +9,7 @@ interface CardPreviewProps {
   toName?: string;
   fromName?: string;
   text: string;
+  size?: "default" | "large";
 }
 
 export default function CardPreview({
@@ -16,6 +17,7 @@ export default function CardPreview({
   toName,
   fromName,
   text,
+  size = "default",
 }: CardPreviewProps) {
   const [isRevealed, setIsRevealed] = useState(false);
 
@@ -25,15 +27,18 @@ export default function CardPreview({
     return () => clearTimeout(timer);
   }, []);
 
-  const fontClass = template.styleTokens.fontStyle === "handwriting" 
-    ? "font-handwriting" 
+  const fontClass = template.styleTokens.fontStyle === "handwriting"
+    ? "font-handwriting"
     : "";
+
+  const isLarge = size === "large";
 
   return (
     <div
       className={`
         relative bg-white rounded-3xl shadow-2xl overflow-hidden
-        aspect-[3/4] max-w-md mx-auto
+        aspect-[3/4] mx-auto
+        ${isLarge ? "max-w-xl" : "max-w-md"}
         transition-all duration-700 ease-out
         ${isRevealed ? "opacity-100 scale-100" : "opacity-0 scale-95"}
       `}
@@ -48,7 +53,7 @@ export default function CardPreview({
       />
 
       {/* Card content */}
-      <div className="flex flex-col h-full p-6 sm:p-8">
+      <div className={`flex flex-col h-full ${isLarge ? "p-8 sm:p-10" : "p-6 sm:p-8"}`}>
         {/* Illustration */}
         <div className="relative flex-shrink-0 h-1/2 mb-4">
           <Image
@@ -75,7 +80,7 @@ export default function CardPreview({
           {/* To */}
           {toName && (
             <p
-              className={`text-sm mb-2 ${fontClass}`}
+              className={`${isLarge ? "text-base" : "text-sm"} mb-2 ${fontClass}`}
               style={{ color: template.styleTokens.primaryColor }}
             >
               Pro: <span className="font-semibold">{toName}</span>
@@ -84,7 +89,7 @@ export default function CardPreview({
 
           {/* Main text */}
           <p
-            className={`text-lg sm:text-xl text-gray-800 leading-relaxed text-center my-4 ${fontClass}`}
+            className={`${isLarge ? "text-xl sm:text-2xl" : "text-lg sm:text-xl"} text-gray-800 leading-relaxed text-center my-4 ${fontClass}`}
           >
             {text}
           </p>
@@ -92,7 +97,7 @@ export default function CardPreview({
           {/* From */}
           {fromName && (
             <p
-              className={`text-sm text-right mt-auto ${fontClass}`}
+              className={`${isLarge ? "text-base" : "text-sm"} text-right mt-auto ${fontClass}`}
               style={{ color: template.styleTokens.primaryColor }}
             >
               Od: <span className="font-semibold">{fromName}</span>
@@ -103,7 +108,7 @@ export default function CardPreview({
 
       {/* Corner hearts decoration */}
       <div
-        className="absolute bottom-4 right-4 text-2xl opacity-30"
+        className={`${isLarge ? "bottom-6 right-6 text-3xl" : "bottom-4 right-4 text-2xl"} absolute opacity-30`}
         style={{ color: template.styleTokens.primaryColor }}
       >
         💕
