@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Valentine2 — Vytvoř valentýnku",
-  description: "Vytvoř jedinečnou valentýnskou kartu s vlastními texty a ilustracemi",
+  title: "Digi-Valentýnka",
+  description: "Vytvoř jedinečnou valentýnskou kartu s vlastními texty",
 };
 
 export default function RootLayout({
