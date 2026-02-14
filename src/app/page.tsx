@@ -15,7 +15,7 @@ export default function Home() {
           Prolom ledy s jedinečkou valentýnkou!
         </h1>
         <p className="text-lg text-[#5c4038] max-w-2xl mx-auto leading-relaxed">
-          Zapomeň na univerzální básničky z internetu. Vytvoř valentýnku, která má jiskru a vtip. 
+          Kašli na univerzální básničky z netu. Vytvoř valentýnku, která má jiskru a vtip. 
         
         </p>
       </header>
