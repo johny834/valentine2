@@ -65,7 +65,7 @@ async function inlineImageSources(sourceRoot: HTMLElement, targetRoot: HTMLEleme
   );
 }
 
-export async function exportElementToPng(element: HTMLElement): Promise<string> {
+export async function exportElementToPngBlob(element: HTMLElement): Promise<Blob> {
   const { width, height } = element.getBoundingClientRect();
   const clonedElement = element.cloneNode(true) as HTMLElement;
   inlineStyles(element, clonedElement);
