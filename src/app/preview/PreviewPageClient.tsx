@@ -61,9 +61,9 @@ export default function PreviewPageClient({
   return (
     <>
       <div ref={cardRef} className="mb-8">
-        <div className="valentine-card max-w-2xl mx-auto">
-          <div className="h-[28rem] sm:h-[34rem] bg-gradient-to-br from-[#ffdde1] to-[#ee9ca7] flex items-center justify-center overflow-hidden">
-            <div className={`relative ${imagePath ? "w-full h-full" : "w-48 h-48 sm:w-56 sm:h-56"}`}>
+        <div className="valentine-card max-w-[29.5rem] mx-auto">
+          <div className="h-[20rem] sm:h-[24rem] bg-gradient-to-br from-[#ffdde1] to-[#ee9ca7] flex items-center justify-center overflow-hidden">
+            <div className={`relative ${imagePath ? "w-full h-full" : "w-36 h-36 sm:w-40 sm:h-40"}`}>
               <Image
                 src={displayImage}
                 alt="Valentine card"
@@ -74,12 +74,12 @@ export default function PreviewPageClient({
             </div>
           </div>
 
-          <div className="p-8 sm:p-10">
+          <div className="p-6 sm:p-7">
             <p className="text-base font-semibold text-[#a24b4b] mb-2">
               Pro <span className="text-[#2d1f1a]">{toName}</span>
             </p>
 
-            <p className="font-display text-3xl sm:text-4xl font-bold text-[#2d1f1a] my-6 leading-snug">
+            <p className="font-display text-2xl sm:text-3xl font-bold text-[#2d1f1a] my-5 leading-snug">
               {text}
             </p>
 
