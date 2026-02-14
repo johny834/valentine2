@@ -86,12 +86,8 @@ export async function POST(request: NextRequest) {
     }
 
     const sanitizedImagePath = body.imagePath?.trim();
-    const inferredImagePath = texts.find((entry) => (
-      entry.tone === body.tone && entry.text === body.messageText && entry.image
-    ))?.image;
-    const candidateImagePath = sanitizedImagePath || inferredImagePath;
     const hasCustomIllustration = Boolean(
-      candidateImagePath && candidateImagePath.startsWith("/illustrations/")
+      sanitizedImagePath && sanitizedImagePath.startsWith("/illustrations/")
     );
 
     // Build template snapshot
@@ -99,7 +95,7 @@ export async function POST(request: NextRequest) {
       id: template.id,
       name: template.name,
       illustrationPath: hasCustomIllustration
-        ? candidateImagePath as string
+        ? sanitizedImagePath as string
         : template.illustrationPath,
       styleTokens: template.styleTokens as TemplateSnapshot["styleTokens"],
     };
@@ -116,7 +112,7 @@ export async function POST(request: NextRequest) {
       is_anonymous: body.isAnonymous ?? false,
       tone: body.tone,
       message_text: escapeHtml(body.messageText.trim()),
-      image_path: hasCustomIllustration ? candidateImagePath : null,
+      image_path: hasCustomIllustration ? sanitizedImagePath : null,
     };
 
     // Insert into database

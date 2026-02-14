@@ -19,13 +19,7 @@ export default async function PreviewPage({ searchParams }: PageProps) {
   const tone = params.tone && VALID_TONES.includes(params.tone as Tone)
     ? (params.tone as Tone)
     : "cute";
-  const imagePath = params.img || params.image || params.imagePath;
-
-  const matchedTextImage = loadTexts().find((entry) => (
-    entry.tone === tone && entry.text === text && entry.image
-  ))?.image;
-
-  const resolvedImagePath = imagePath || matchedTextImage;
+  const imagePath = params.img;
 
   // Redirect if missing required data
   if (!templateId || !text) {
@@ -58,7 +52,7 @@ export default async function PreviewPage({ searchParams }: PageProps) {
         fromName={fromName}
         text={text}
         tone={tone}
-        imagePath={resolvedImagePath}
+        imagePath={imagePath}
       />
     </main>
   );
