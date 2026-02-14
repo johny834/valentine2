@@ -75,6 +75,7 @@ export default async function PublicCardPage({ params }: PageProps) {
           fromName={card.fromName ?? "Tajný ctitel"}
           text={card.messageText}
           token={token}
+          imagePath={card.imagePath ?? undefined}
         />
 
         {/* Expiry notice */}

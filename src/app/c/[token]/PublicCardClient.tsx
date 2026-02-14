@@ -9,6 +9,7 @@ interface Props {
   fromName?: string;
   text: string;
   token: string;
+  imagePath?: string;
 }
 
 export default function PublicCardClient({
@@ -17,6 +18,7 @@ export default function PublicCardClient({
   fromName,
   text,
   token,
+  imagePath,
 }: Props) {
   const shareUrl = typeof window !== "undefined" 
     ? window.location.href 
@@ -52,6 +54,7 @@ export default function PublicCardClient({
           toName={toName}
           fromName={fromName}
           text={text}
+          imagePath={imagePath}
           size="large"
         />
       </div>
