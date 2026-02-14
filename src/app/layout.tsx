@@ -1,21 +1,5 @@
 import type { Metadata } from "next";
-import { Nunito, Caveat, Playfair_Display } from "next/font/google";
 import "./globals.css";
-
-const nunito = Nunito({
-  variable: "--font-nunito",
-  subsets: ["latin", "latin-ext"],
-});
-
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin", "latin-ext"],
-});
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin", "latin-ext"],
-});
 
 export const metadata: Metadata = {
   title: "Valentine2 — Vytvoř valentýnku",
@@ -29,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="cs">
-      <body className={`${nunito.variable} ${caveat.variable} ${playfair.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased">
         {/* Ambient background */}
         <div className="ambient">
           <span></span>
