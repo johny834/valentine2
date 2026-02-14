@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { Template, Tone } from "@/types/content";
+import { exportElementToPng } from "@/lib/exportToPng";
 
 interface Props {
   template: Template;
@@ -32,6 +33,8 @@ export default function PreviewPageClient({
 }: Props) {
   const router = useRouter();
   const [isSending, setIsSending] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const displayImage = imagePath || template.illustrationPath;
 
@@ -71,9 +74,28 @@ export default function PreviewPageClient({
     }
   };
 
+  const handleSaveAsImage = async () => {
+    if (!cardRef.current || isSaving) {
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      const dataUrl = await exportElementToPng(cardRef.current);
+      const link = document.createElement("a");
+      link.download = "valentynka-nahled.png";
+      link.href = dataUrl;
+      link.click();
+    } catch {
+      alert("Kartu se nepodařilo uložit. Zkus to prosím znovu.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <>
-      <div className="mb-8">
+      <div ref={cardRef} className="mb-8">
         <div className="valentine-card max-w-2xl mx-auto">
           <div className="h-[28rem] sm:h-[34rem] bg-gradient-to-br from-[#ffdde1] to-[#ee9ca7] flex items-center justify-center overflow-hidden">
             <div className={`relative ${imagePath ? "w-full h-full" : "w-48 h-48 sm:w-56 sm:h-56"}`}>
@@ -109,11 +131,18 @@ export default function PreviewPageClient({
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
         <button
-          onClick={handleSendSurprise}
-          disabled={isSending}
+          onClick={handleSaveAsImage}
+          disabled={isSaving}
           className="flex-1 bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-full transition-colors shadow-lg"
         >
-          {isSending ? "Posílám překvápko..." : "Poslat překvápko 💌"}
+          {isSaving ? "Ukládám..." : "Stáhnout kartu jako PNG"}
+        </button>
+        <button
+          onClick={handleSendSurprise}
+          disabled={isSending}
+          className="flex-1 bg-white hover:bg-gray-50 disabled:bg-gray-100 disabled:text-gray-400 text-rose-500 font-semibold py-3 px-6 rounded-full transition-colors shadow-lg border border-rose-200"
+        >
+          {isSending ? "Posílám..." : "Vygenerovat veřejný odkaz"}
         </button>
       </div>
     </>
