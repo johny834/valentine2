@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import type { Template, Tone, TextEntry } from "@/types/content";
 import { MAX_LENGTHS, containsBlockedContent } from "@/lib/validation";
 import { loadTexts } from "@/lib/content";
@@ -19,6 +20,7 @@ const CATEGORIES: { tone: Tone; label: string; emoji: string }[] = [
 ];
 
 export default function HomeClient({ templates }: Props) {
+  const router = useRouter();
   const defaultTemplate = templates[0];
   const allTexts = loadTexts();
   
@@ -28,6 +30,7 @@ export default function HomeClient({ templates }: Props) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedTone, setSelectedTone] = useState<Tone>("funny");
   const [activeCategory, setActiveCategory] = useState<Tone>("funny");
+  const [isSending, setIsSending] = useState(false);
 
   // Live preview values
   const displayFrom = fromName.trim() || "Tajný ctitel";
@@ -44,19 +47,38 @@ export default function HomeClient({ templates }: Props) {
   };
 
   const handleShare = async () => {
-    const shareText = `💕 Pro: ${displayTo}\n\n${displayText}\n\n— ${displayFrom}`;
-    
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Moje valentýnka 💕",
-          text: shareText,
-        });
-      } catch {
-        copyToClipboard(shareText);
+    if (isSending) return;
+
+    setIsSending(true);
+
+    try {
+      const response = await fetch("/api/cards", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          templateId: defaultTemplate.id,
+          toName: displayTo,
+          fromName: displayFrom,
+          tone: selectedTone,
+          messageText: displayText,
+          isAnonymous: fromName.trim().length === 0,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.publicUrl) {
+        throw new Error(result.error || "Nepodařilo se vytvořit sdílený odkaz");
       }
-    } else {
+
+      router.push(result.publicUrl);
+    } catch {
+      const shareText = `💕 Pro: ${displayTo}\n\n${displayText}\n\n— ${displayFrom}`;
       copyToClipboard(shareText);
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -175,9 +197,10 @@ export default function HomeClient({ templates }: Props) {
           <div className="mt-4 space-y-2">
             <button
               onClick={handleShare}
+              disabled={isSending}
               className="btn-primary w-full text-lg"
             >
-              🚀 Poslat překvápko
+              {isSending ? "Posílám překvápko..." : "🚀 Poslat překvápko"}
             </button>
             <p className="text-center text-xs text-[#a08070]">
               ...a sleduj tu reakci 👀
