@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { Metadata } from "next";
 import PublicCardClient from "./PublicCardClient";
-import type { PublicCard, TemplateSnapshot } from "@/types/database";
+import type { PublicCard } from "@/types/database";
 
 interface PageProps {
   params: Promise<{ token: string }>;
@@ -86,12 +87,12 @@ export default async function PublicCardPage({ params }: PageProps) {
         {/* Create your own CTA */}
         <div className="mt-12 text-center">
           <p className="text-gray-600 mb-4">Chceš někoho taky trochu rozhodit? 😏</p>
-          <a
+          <Link
             href="/"
             className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-lg"
           >
             Vytvořit vlastní za 30 vteřin 🚀
-          </a>
+          </Link>
         </div>
       </div>
     </main>

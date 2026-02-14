@@ -52,6 +52,7 @@ export default function PublicCardClient({
           toName={toName}
           fromName={fromName}
           text={text}
+          size="large"
         />
       </div>
 
