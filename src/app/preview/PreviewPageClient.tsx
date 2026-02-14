@@ -2,9 +2,8 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import type { Template, Tone } from "@/types/content";
-import { exportElementToPng } from "@/lib/exportToPng";
+import { exportElementToPngBlob } from "@/lib/exportToPng";
 
 interface Props {
   template: Template;
@@ -31,48 +30,10 @@ export default function PreviewPageClient({
   tone,
   imagePath,
 }: Props) {
-  const router = useRouter();
-  const [isSending, setIsSending] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const displayImage = imagePath || template.illustrationPath;
-
-  const handleSendSurprise = async () => {
-    if (isSending) return;
-
-    setIsSending(true);
-
-    try {
-      const response = await fetch("/api/cards", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          templateId: template.id,
-          toName,
-          fromName,
-          tone,
-          messageText: text,
-          isAnonymous: fromName === "Anonym",
-          imagePath: imagePath || undefined,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.publicUrl) {
-        throw new Error(result.error || "Nepodařilo se vytvořit sdílený odkaz");
-      }
-
-      router.push(result.publicUrl);
-    } catch {
-      alert("Nepodařilo se vytvořit sdílený odkaz. Zkus to prosím znovu.");
-    } finally {
-      setIsSending(false);
-    }
-  };
 
   const handleSaveAsImage = async () => {
     if (!cardRef.current || isSaving) {
@@ -81,11 +42,15 @@ export default function PreviewPageClient({
 
     try {
       setIsSaving(true);
-      const dataUrl = await exportElementToPng(cardRef.current);
+      const pngBlob = await exportElementToPngBlob(cardRef.current);
+      const downloadUrl = URL.createObjectURL(pngBlob);
       const link = document.createElement("a");
       link.download = "valentynka-nahled.png";
-      link.href = dataUrl;
+      link.href = downloadUrl;
+      document.body.appendChild(link);
       link.click();
+      link.remove();
+      URL.revokeObjectURL(downloadUrl);
     } catch {
       alert("Kartu se nepodařilo uložit. Zkus to prosím znovu.");
     } finally {
@@ -136,13 +101,6 @@ export default function PreviewPageClient({
           className="flex-1 bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-full transition-colors shadow-lg"
         >
           {isSaving ? "Ukládám..." : "Stáhnout kartu jako PNG"}
-        </button>
-        <button
-          onClick={handleSendSurprise}
-          disabled={isSending}
-          className="flex-1 bg-white hover:bg-gray-50 disabled:bg-gray-100 disabled:text-gray-400 text-rose-500 font-semibold py-3 px-6 rounded-full transition-colors shadow-lg border border-rose-200"
-        >
-          {isSending ? "Posílám..." : "Vygenerovat veřejný odkaz"}
         </button>
       </div>
     </>
