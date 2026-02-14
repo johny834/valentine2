@@ -46,45 +46,16 @@ export default function HomeClient({ templates }: Props) {
     setSelectedTone(text.tone);
   };
 
-  const handleShare = async () => {
-    if (isSending) return;
+  const handleShare = () => {
+    const params = new URLSearchParams({
+      t: defaultTemplate.id,
+      to: displayTo,
+      from: fromName.trim() ? displayFrom : "Anonym",
+      tone: selectedTone,
+      text: displayText,
+    });
 
-    setIsSending(true);
-
-    try {
-      const response = await fetch("/api/cards", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          templateId: defaultTemplate.id,
-          toName: displayTo,
-          fromName: displayFrom,
-          tone: selectedTone,
-          messageText: displayText,
-          isAnonymous: fromName.trim().length === 0,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.publicUrl) {
-        throw new Error(result.error || "Nepodařilo se vytvořit sdílený odkaz");
-      }
-
-      router.push(result.publicUrl);
-    } catch {
-      const shareText = `💕 Pro: ${displayTo}\n\n${displayText}\n\n— ${displayFrom}`;
-      copyToClipboard(shareText);
-    } finally {
-      setIsSending(false);
-    }
-  };
-
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    alert("Zkopírováno do schránky! 📋");
+    window.location.href = `/preview?${params.toString()}`;
   };
 
   const hasError = containsBlockedContent(fromName) || containsBlockedContent(toName) || containsBlockedContent(customMessage);
