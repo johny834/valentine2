@@ -1,12 +1,18 @@
-function inlineStyles(source: Element, target: Element) {
+function copyComputedStyles(source: Element, target: Element) {
   const computedStyle = window.getComputedStyle(source);
-  let styleText = "";
 
-  for (const property of computedStyle) {
-    styleText += `${property}:${computedStyle.getPropertyValue(property)};`;
+  for (let i = 0; i < computedStyle.length; i += 1) {
+    const property = computedStyle.item(i);
+    if (!property) {
+      continue;
+    }
+
+    (target as HTMLElement).style.setProperty(
+      property,
+      computedStyle.getPropertyValue(property),
+      computedStyle.getPropertyPriority(property),
+    );
   }
-
-  target.setAttribute("style", styleText);
 
   const sourceChildren = Array.from(source.children);
   const targetChildren = Array.from(target.children);
@@ -14,7 +20,7 @@ function inlineStyles(source: Element, target: Element) {
   sourceChildren.forEach((sourceChild, index) => {
     const targetChild = targetChildren[index];
     if (targetChild) {
-      inlineStyles(sourceChild, targetChild);
+      copyComputedStyles(sourceChild, targetChild);
     }
   });
 }
@@ -56,69 +62,83 @@ async function inlineImageSources(sourceRoot: HTMLElement, targetRoot: HTMLEleme
 
         const dataUrl = await blobToDataUrl(await response.blob());
         targetImage.src = dataUrl;
-        targetImage.removeAttribute("srcset");
       } catch {
         targetImage.src = sourceUrl;
-        targetImage.removeAttribute("srcset");
       }
+
+      targetImage.removeAttribute("srcset");
+      targetImage.removeAttribute("sizes");
+      targetImage.loading = "eager";
+      targetImage.decoding = "sync";
     }),
   );
 }
 
+async function waitForFonts(): Promise<void> {
+  if ("fonts" in document) {
+    await (document as Document & { fonts: FontFaceSet }).fonts.ready;
+  }
+}
+
 export async function exportElementToPngBlob(element: HTMLElement): Promise<Blob> {
-  const { width, height } = element.getBoundingClientRect();
+  await waitForFonts();
+
+  const rect = element.getBoundingClientRect();
+  const width = Math.max(1, Math.round(rect.width));
+  const height = Math.max(1, Math.round(rect.height));
+
   const clonedElement = element.cloneNode(true) as HTMLElement;
-  inlineStyles(element, clonedElement);
+  clonedElement.style.margin = "0";
+  clonedElement.style.width = `${width}px`;
+  clonedElement.style.height = `${height}px`;
+
+  copyComputedStyles(element, clonedElement);
   await inlineImageSources(element, clonedElement);
 
-  const serializedNode = new XMLSerializer().serializeToString(clonedElement);
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-      <foreignObject width="100%" height="100%">${serializedNode}</foreignObject>
+  const foreignObjectMarkup = new XMLSerializer().serializeToString(clonedElement);
+  const svgMarkup = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+      <foreignObject width="100%" height="100%">
+        <div xmlns="http://www.w3.org/1999/xhtml">${foreignObjectMarkup}</div>
+      </foreignObject>
     </svg>
   `;
 
-  const image = new Image();
-  const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
-  const url = URL.createObjectURL(svgBlob);
+  const svgDataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgMarkup)}`;
 
   return new Promise<Blob>((resolve, reject) => {
-    image.onload = () => {
-      try {
-        const canvas = document.createElement("canvas");
-        canvas.width = Math.round(width * 2);
-        canvas.height = Math.round(height * 2);
+    const image = new Image();
 
-        const context = canvas.getContext("2d");
-        if (!context) {
-          reject(new Error("Canvas context not available"));
+    image.onload = () => {
+      const scale = Math.min(2, window.devicePixelRatio || 1);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(width * scale);
+      canvas.height = Math.round(height * scale);
+
+      const context = canvas.getContext("2d");
+      if (!context) {
+        reject(new Error("Canvas context not available"));
+        return;
+      }
+
+      context.scale(scale, scale);
+      context.drawImage(image, 0, 0, width, height);
+
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          reject(new Error("Blob export failed"));
           return;
         }
 
-        context.scale(2, 2);
-        context.drawImage(image, 0, 0);
-
-        canvas.toBlob((blob) => {
-          if (!blob) {
-            reject(new Error("Blob export failed"));
-            return;
-          }
-
-          resolve(blob);
-        }, "image/png");
-      } catch {
-        reject(new Error("Image export failed"));
-      } finally {
-        URL.revokeObjectURL(url);
-      }
+        resolve(blob);
+      }, "image/png");
     };
 
     image.onerror = () => {
-      URL.revokeObjectURL(url);
       reject(new Error("Image export failed"));
     };
 
-    image.src = url;
+    image.src = svgDataUrl;
   });
 }
 
