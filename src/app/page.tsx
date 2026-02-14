@@ -12,7 +12,7 @@ export default function Home() {
           ✨ Digi-Valentýnka 💘
         </p>
         <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#2d1f1a] mb-4 leading-tight">
-          Prolom ledy s jedinečkou valentýnkou!
+          Prolom ledy s jedinečnou valentýnkou!
         </h1>
         <p className="text-lg text-[#5c4038] max-w-2xl mx-auto leading-relaxed">
           Kašli na univerzální básničky z netu. Vytvoř valentýnku, která má jiskru a vtip. 
